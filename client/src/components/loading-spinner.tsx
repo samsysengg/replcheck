@@ -1,0 +1,16 @@
+export function LoadingSpinner({ size = "default" }: { size?: "sm" | "default" | "lg" }) {
+  const sizeClasses = {
+    sm: "w-4 h-4 border-2",
+    default: "w-8 h-8 border-3",
+    lg: "w-12 h-12 border-4",
+  };
+
+  return (
+    <div className="flex items-center justify-center">
+      <div
+        className={`${sizeClasses[size]} border-primary border-t-transparent rounded-full animate-spin`}
+        data-testid="loading-spinner"
+      />
+    </div>
+  );
+}

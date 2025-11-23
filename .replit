@@ -37,3 +37,10 @@ author = "agent"
 task = "shell.exec"
 args = "npm run dev"
 waitForPort = 5000
+
+[userenv]
+
+[userenv.shared]
+MONGO_URI = "mongodb+srv://wyre_db_user:Alpha12345@wyre.qcipzpf.mongodb.net/wyre_chat?retryWrites=true&w=majority"
+JWT_SECRET = "your-jwt-secret-key-change-in-production-please-use-strong-random-value"
+NODE_ENV = "production"

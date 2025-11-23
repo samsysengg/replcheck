@@ -8,6 +8,10 @@ import express, {
 } from "express";
 
 import { registerRoutes } from "./routes";
+import { connectDB } from "./db";
+import helmet from "helmet";
+import compression from "compression";
+import cors from "cors";
 
 export function log(message: string, source = "express") {
   const formattedTime = new Date().toLocaleTimeString("en-US", {
@@ -21,6 +25,21 @@ export function log(message: string, source = "express") {
 }
 
 export const app = express();
+
+app.use(helmet({
+  contentSecurityPolicy: false,
+  crossOriginEmbedderPolicy: false,
+}));
+app.use(compression());
+
+const allowedOrigins = process.env.NODE_ENV === "production" 
+  ? [process.env.REPLIT_DEV_DOMAIN ? `https://${process.env.REPLIT_DEV_DOMAIN}` : "https://*.replit.app"]
+  : ["http://localhost:5000"];
+
+app.use(cors({
+  origin: allowedOrigins,
+  credentials: true,
+}));
 
 declare module 'http' {
   interface IncomingMessage {
@@ -67,6 +86,8 @@ app.use((req, res, next) => {
 export default async function runApp(
   setup: (app: Express, server: Server) => Promise<void>,
 ) {
+  await connectDB();
+  
   const server = await registerRoutes(app);
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
