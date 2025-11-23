@@ -162,23 +162,25 @@ export function ChannelSidebar({
         </div>
       </ScrollArea>
 
-      <div className="px-3 py-3 border-t border-sidebar-border">
-        <div className="flex items-center gap-3 px-2 py-2 rounded-md hover-elevate">
-          <div className="relative">
-            <Avatar className="w-9 h-9">
-              <AvatarImage src={currentUser.avatar} />
-              <AvatarFallback>
-                {currentUser.username.substring(0, 2).toUpperCase()}
-              </AvatarFallback>
-            </Avatar>
-            <div className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-sidebar bg-status-${currentUser.status}`} />
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-sidebar-foreground truncate">{currentUser.username}</p>
-            <p className="text-xs text-muted-foreground capitalize">{currentUser.status}</p>
+      {currentUser && (
+        <div className="px-3 py-3 border-t border-sidebar-border">
+          <div className="flex items-center gap-3 px-2 py-2 rounded-md hover-elevate">
+            <div className="relative">
+              <Avatar className="w-9 h-9">
+                <AvatarImage src={currentUser.avatar} />
+                <AvatarFallback>
+                  {currentUser.username.substring(0, 2).toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
+              <div className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-sidebar bg-status-${currentUser.status}`} />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-medium text-sidebar-foreground truncate">{currentUser.username}</p>
+              <p className="text-xs text-muted-foreground capitalize">{currentUser.status}</p>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
