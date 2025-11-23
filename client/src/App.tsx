@@ -10,12 +10,22 @@ import HomePage from "@/pages/home";
 import NotFound from "@/pages/not-found";
 
 function PrivateRoute({ component: Component }: { component: () => JSX.Element }) {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isLoading } = useAuth();
+  
+  if (isLoading) {
+    return <div className="flex items-center justify-center h-screen">Loading...</div>;
+  }
+  
   return isAuthenticated ? <Component /> : <Redirect to="/auth" />;
 }
 
 function PublicRoute({ component: Component }: { component: () => JSX.Element }) {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isLoading } = useAuth();
+  
+  if (isLoading) {
+    return <div className="flex items-center justify-center h-screen">Loading...</div>;
+  }
+  
   return !isAuthenticated ? <Component /> : <Redirect to="/" />;
 }
 
