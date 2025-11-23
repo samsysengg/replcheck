@@ -21,6 +21,7 @@ const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 5,
   message: "Too many requests, please try again later",
+  skip: () => process.env.NODE_ENV !== "production",
 });
 
 export async function registerRoutes(app: Express): Promise<Server> {

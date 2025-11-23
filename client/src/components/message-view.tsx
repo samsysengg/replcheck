@@ -11,7 +11,7 @@ interface MessageViewProps {
   channel: Channel | null;
   messages: Message[];
   users: Map<string, User>;
-  currentUser: User;
+  currentUser: User | null;
   onSendMessage: (content: string) => void;
   onStartVideoCall: () => void;
   onStartVoiceCall: () => void;
@@ -49,7 +49,7 @@ export function MessageView({
     }
   };
 
-  if (!channel) {
+  if (!channel || !currentUser) {
     return (
       <div className="flex items-center justify-center h-screen flex-1 bg-background">
         <div className="text-center space-y-3">

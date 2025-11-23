@@ -1,0 +1,55 @@
+chunk-RPCDYKBN.js?v=4b418c1f:21551 Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools
+channel-sidebar.tsx:172 Uncaught TypeError: Cannot read properties of undefined (reading 'substring')
+    at ChannelSidebar (channel-sidebar.tsx:172:41)
+    at renderWithHooks (chunk-RPCDYKBN.js?v=4b418c1f:11548:26)
+    at mountIndeterminateComponent (chunk-RPCDYKBN.js?v=4b418c1f:14926:21)
+    at beginWork (chunk-RPCDYKBN.js?v=4b418c1f:15914:22)
+    at HTMLUnknownElement.callCallback2 (chunk-RPCDYKBN.js?v=4b418c1f:3674:22)
+    at Object.invokeGuardedCallbackDev (chunk-RPCDYKBN.js?v=4b418c1f:3699:24)
+    at invokeGuardedCallback (chunk-RPCDYKBN.js?v=4b418c1f:3733:39)
+    at beginWork$1 (chunk-RPCDYKBN.js?v=4b418c1f:19765:15)
+    at performUnitOfWork (chunk-RPCDYKBN.js?v=4b418c1f:19198:20)
+    at workLoopSync (chunk-RPCDYKBN.js?v=4b418c1f:19137:13)
+channel-sidebar.tsx:172 Uncaught TypeError: Cannot read properties of undefined (reading 'substring')
+    at ChannelSidebar (channel-sidebar.tsx:172:41)
+    at renderWithHooks (chunk-RPCDYKBN.js?v=4b418c1f:11548:26)
+    at mountIndeterminateComponent (chunk-RPCDYKBN.js?v=4b418c1f:14926:21)
+    at beginWork (chunk-RPCDYKBN.js?v=4b418c1f:15914:22)
+    at HTMLUnknownElement.callCallback2 (chunk-RPCDYKBN.js?v=4b418c1f:3674:22)
+    at Object.invokeGuardedCallbackDev (chunk-RPCDYKBN.js?v=4b418c1f:3699:24)
+    at invokeGuardedCallback (chunk-RPCDYKBN.js?v=4b418c1f:3733:39)
+    at beginWork$1 (chunk-RPCDYKBN.js?v=4b418c1f:19765:15)
+    at performUnitOfWork (chunk-RPCDYKBN.js?v=4b418c1f:19198:20)
+    at workLoopSync (chunk-RPCDYKBN.js?v=4b418c1f:19137:13)
+chunk-RPCDYKBN.js?v=4b418c1f:14032 The above error occurred in the <ChannelSidebar> component:
+
+    at ChannelSidebar (https://6c873d08-5b5e-4d8e-90a0-fc46f5d40490-00-2892psz3rbw4r.janeway.replit.dev/src/components/channel-sidebar.tsx:26:3)
+    at div
+    at HomePage (https://6c873d08-5b5e-4d8e-90a0-fc46f5d40490-00-2892psz3rbw4r.janeway.replit.dev/src/pages/home.tsx:33:20)
+    at PrivateRoute (https://6c873d08-5b5e-4d8e-90a0-fc46f5d40490-00-2892psz3rbw4r.janeway.replit.dev/src/App.tsx?v=PdANuvVzqVVjHwgb7L9A0:28:36)
+    at Route (https://6c873d08-5b5e-4d8e-90a0-fc46f5d40490-00-2892psz3rbw4r.janeway.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=4b418c1f:206:16)
+    at Switch (https://6c873d08-5b5e-4d8e-90a0-fc46f5d40490-00-2892psz3rbw4r.janeway.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=4b418c1f:262:17)
+    at Router
+    at Provider (https://6c873d08-5b5e-4d8e-90a0-fc46f5d40490-00-2892psz3rbw4r.janeway.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-OXMUIJ5F.js?v=4b418c1f:55:15)
+    at TooltipProvider (https://6c873d08-5b5e-4d8e-90a0-fc46f5d40490-00-2892psz3rbw4r.janeway.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=4b418c1f:2350:5)
+    at SocketProvider (https://6c873d08-5b5e-4d8e-90a0-fc46f5d40490-00-2892psz3rbw4r.janeway.replit.dev/src/contexts/SocketContext.tsx:23:34)
+    at AuthProvider (https://6c873d08-5b5e-4d8e-90a0-fc46f5d40490-00-2892psz3rbw4r.janeway.replit.dev/src/contexts/AuthContext.tsx:21:32)
+    at QueryClientProvider (https://6c873d08-5b5e-4d8e-90a0-fc46f5d40490-00-2892psz3rbw4r.janeway.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@tanstack_react-query.js?v=4b418c1f:3093:3)
+    at App
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+logCapturedError @ chunk-RPCDYKBN.js?v=4b418c1f:14032
+chunk-RPCDYKBN.js?v=4b418c1f:9129 Uncaught TypeError: Cannot read properties of undefined (reading 'substring')
+    at ChannelSidebar (channel-sidebar.tsx:172:41)
+    at renderWithHooks (chunk-RPCDYKBN.js?v=4b418c1f:11548:26)
+    at mountIndeterminateComponent (chunk-RPCDYKBN.js?v=4b418c1f:14926:21)
+    at beginWork (chunk-RPCDYKBN.js?v=4b418c1f:15914:22)
+    at beginWork$1 (chunk-RPCDYKBN.js?v=4b418c1f:19753:22)
+    at performUnitOfWork (chunk-RPCDYKBN.js?v=4b418c1f:19198:20)
+    at workLoopSync (chunk-RPCDYKBN.js?v=4b418c1f:19137:13)
+    at renderRootSync (chunk-RPCDYKBN.js?v=4b418c1f:19116:15)
+    at recoverFromConcurrentError (chunk-RPCDYKBN.js?v=4b418c1f:18736:28)
+    at performSyncWorkOnRoot (chunk-RPCDYKBN.js?v=4b418c1f:18879:28)
+socket__io-client.js?v=4b418c1f:1035 WebSocket connection to 'wss://6c873d08-5b5e-4d8e-90a0-fc46f5d40490-00-2892psz3rbw4r.janeway.replit.dev/socket.io/?EIO=4&transport=websocket' failed: WebSocket is closed before the connection is established.
+doClose @ socket__io-client.js?v=4b418c1f:1035

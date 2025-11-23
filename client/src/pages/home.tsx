@@ -163,44 +163,52 @@ export default function HomePage() {
         onWorkspaceSelect={setActiveWorkspaceId}
         onCreateWorkspace={() => setCreateWorkspaceOpen(true)}
       />
-      <ChannelSidebar
-        workspace={activeWorkspace}
-        channels={channels}
-        directMessages={directMessages}
-        activeChannelId={activeChannelId}
-        activeDmId={activeDmId}
-        onChannelSelect={(id) => {
-          setActiveChannelId(id);
-          setActiveDmId(null);
-        }}
-        onDmSelect={(id) => {
-          setActiveDmId(id);
-          setActiveChannelId(null);
-        }}
-        onCreateChannel={() => setCreateChannelOpen(true)}
-        currentUser={user}
-      />
-      <MessageView
-        channel={activeChannel}
-        messages={messages}
-        users={usersMap}
-        currentUser={user}
-        onSendMessage={(content) => sendMessageMutation.mutate(content)}
-        onStartVideoCall={handleStartVideoCall}
-        onStartVoiceCall={handleStartVideoCall}
-      />
-      <CreateWorkspaceDialog
-        open={createWorkspaceOpen}
-        onOpenChange={setCreateWorkspaceOpen}
-        onSubmit={(data) => createWorkspaceMutation.mutate(data)}
-        isLoading={createWorkspaceMutation.isPending}
-      />
-      <CreateChannelDialog
-        open={createChannelOpen}
-        onOpenChange={setCreateChannelOpen}
-        onSubmit={(data) => createChannelMutation.mutate(data)}
-        isLoading={createChannelMutation.isPending}
-      />
+      {user && (
+        <ChannelSidebar
+          workspace={activeWorkspace}
+          channels={channels}
+          directMessages={directMessages}
+          activeChannelId={activeChannelId}
+          activeDmId={activeDmId}
+          onChannelSelect={(id) => {
+            setActiveChannelId(id);
+            setActiveDmId(null);
+          }}
+          onDmSelect={(id) => {
+            setActiveDmId(id);
+            setActiveChannelId(null);
+          }}
+          onCreateChannel={() => setCreateChannelOpen(true)}
+          currentUser={user}
+        />
+      )}
+      {user && (
+        <MessageView
+          channel={activeChannel}
+          messages={messages}
+          users={usersMap}
+          currentUser={user}
+          onSendMessage={(content) => sendMessageMutation.mutate(content)}
+          onStartVideoCall={handleStartVideoCall}
+          onStartVoiceCall={handleStartVideoCall}
+        />
+      )}
+      {user && (
+        <>
+          <CreateWorkspaceDialog
+            open={createWorkspaceOpen}
+            onOpenChange={setCreateWorkspaceOpen}
+            onSubmit={(data) => createWorkspaceMutation.mutate(data)}
+            isLoading={createWorkspaceMutation.isPending}
+          />
+          <CreateChannelDialog
+            open={createChannelOpen}
+            onOpenChange={setCreateChannelOpen}
+            onSubmit={(data) => createChannelMutation.mutate(data)}
+            isLoading={createChannelMutation.isPending}
+          />
+        </>
+      )}
     </div>
   );
 }
