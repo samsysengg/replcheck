@@ -1,8 +1,5 @@
 import { QueryClient, QueryFunction } from "@tanstack/react-query";
-
-function getAuthToken(): string | null {
-  return localStorage.getItem("authToken");
-}
+import { getAuthToken } from "./auth";
 
 async function throwIfResNotOk(res: Response) {
   if (!res.ok) {

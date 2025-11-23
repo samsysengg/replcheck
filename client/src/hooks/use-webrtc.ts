@@ -1,67 +1,86 @@
 import { useState, useEffect, useRef } from "react";
 import { useSocket } from "@/contexts/SocketContext";
-import SimplePeer from "simple-peer";
+
+const ICE_SERVERS = [
+  { urls: "stun:stun.l.google.com:19302" },
+  { urls: "stun:stun1.l.google.com:19302" },
+];
 
 export function useWebRTC() {
   const { socket } = useSocket();
-  const [peers, setPeers] = useState<Map<string, SimplePeer.Instance>>(new Map());
+  const [peers, setPeers] = useState<Map<string, RTCPeerConnection>>(new Map());
   const [remoteStreams, setRemoteStreams] = useState<Map<string, MediaStream>>(new Map());
   const localStreamRef = useRef<MediaStream | null>(null);
 
-  const createPeer = (initiator: boolean, stream: MediaStream, targetId: string) => {
-    const peer = new SimplePeer({
-      initiator,
-      stream,
-      trickle: true,
-      config: {
-        iceServers: [
-          { urls: "stun:stun.l.google.com:19302" },
-          { urls: "stun:stun1.l.google.com:19302" },
-        ],
-      },
+  const createPeerConnection = (targetId: string, stream: MediaStream) => {
+    const pc = new RTCPeerConnection({ iceServers: ICE_SERVERS });
+
+    stream.getTracks().forEach((track) => {
+      pc.addTrack(track, stream);
     });
 
-    peer.on("signal", (signal) => {
-      if (signal.type === "offer") {
-        socket?.emit("webrtc_offer", { to: targetId, offer: signal });
-      } else if (signal.type === "answer") {
-        socket?.emit("webrtc_answer", { to: targetId, answer: signal });
+    pc.onicecandidate = (event) => {
+      if (event.candidate) {
+        socket?.emit("webrtc_ice_candidate", { to: targetId, candidate: event.candidate });
       }
-    });
+    };
 
-    peer.on("stream", (remoteStream) => {
-      setRemoteStreams((prev) => new Map(prev).set(targetId, remoteStream));
-    });
+    pc.ontrack = (event) => {
+      if (event.streams && event.streams[0]) {
+        setRemoteStreams((prev) => new Map(prev).set(targetId, event.streams[0]));
+      }
+    };
 
-    peer.on("error", (err) => {
-      console.error("Peer error:", err);
-    });
+    pc.onconnectionstatechange = () => {
+      console.log(`Peer ${targetId} connection state: ${pc.connectionState}`);
+      if (pc.connectionState === "disconnected" || pc.connectionState === "failed") {
+        setPeers((prev) => {
+          const newPeers = new Map(prev);
+          newPeers.delete(targetId);
+          return newPeers;
+        });
+        setRemoteStreams((prev) => {
+          const newStreams = new Map(prev);
+          newStreams.delete(targetId);
+          return newStreams;
+        });
+      }
+    };
 
-    return peer;
+    return pc;
   };
 
   useEffect(() => {
     if (!socket) return;
 
-    socket.on("webrtc_offer", ({ from, offer }) => {
+    socket.on("webrtc_offer", async ({ from, offer }) => {
       if (!localStreamRef.current) return;
 
-      const peer = createPeer(false, localStreamRef.current, from);
-      peer.signal(offer);
-      setPeers((prev) => new Map(prev).set(from, peer));
+      const pc = createPeerConnection(from, localStreamRef.current);
+      setPeers((prev) => new Map(prev).set(from, pc));
+
+      await pc.setRemoteDescription(new RTCSessionDescription(offer));
+      const answer = await pc.createAnswer();
+      await pc.setLocalDescription(answer);
+
+      socket.emit("webrtc_answer", { to: from, answer });
     });
 
-    socket.on("webrtc_answer", ({ from, answer }) => {
-      const peer = peers.get(from);
-      if (peer) {
-        peer.signal(answer);
+    socket.on("webrtc_answer", async ({ from, answer }) => {
+      const pc = peers.get(from);
+      if (pc) {
+        await pc.setRemoteDescription(new RTCSessionDescription(answer));
       }
     });
 
-    socket.on("webrtc_ice_candidate", ({ from, candidate }) => {
-      const peer = peers.get(from);
-      if (peer) {
-        peer.signal(candidate);
+    socket.on("webrtc_ice_candidate", async ({ from, candidate }) => {
+      const pc = peers.get(from);
+      if (pc && candidate) {
+        try {
+          await pc.addIceCandidate(new RTCIceCandidate(candidate));
+        } catch (error) {
+          console.error("Error adding ICE candidate:", error);
+        }
       }
     });
 
@@ -81,10 +100,15 @@ export function useWebRTC() {
 
       localStreamRef.current = stream;
 
-      participantIds.forEach((participantId) => {
-        const peer = createPeer(true, stream, participantId);
-        setPeers((prev) => new Map(prev).set(participantId, peer));
-      });
+      for (const participantId of participantIds) {
+        const pc = createPeerConnection(participantId, stream);
+        setPeers((prev) => new Map(prev).set(participantId, pc));
+
+        const offer = await pc.createOffer();
+        await pc.setLocalDescription(offer);
+
+        socket?.emit("webrtc_offer", { to: participantId, offer });
+      }
 
       return stream;
     } catch (error) {
@@ -99,7 +123,7 @@ export function useWebRTC() {
       localStreamRef.current = null;
     }
 
-    peers.forEach((peer) => peer.destroy());
+    peers.forEach((pc) => pc.close());
     setPeers(new Map());
     setRemoteStreams(new Map());
   };

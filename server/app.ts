@@ -32,12 +32,26 @@ app.use(helmet({
 }));
 app.use(compression());
 
-const allowedOrigins = process.env.NODE_ENV === "production" 
-  ? [process.env.REPLIT_DEV_DOMAIN ? `https://${process.env.REPLIT_DEV_DOMAIN}` : "https://*.replit.app"]
-  : ["http://localhost:5000"];
+const corsOrigin = (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
+  if (!origin) {
+    return callback(null, true);
+  }
+  
+  if (process.env.NODE_ENV === "production") {
+    if (origin.endsWith(".replit.app") || origin.endsWith(".replit.dev")) {
+      return callback(null, true);
+    }
+    return callback(new Error("Not allowed by CORS"));
+  } else {
+    if (origin.includes("localhost") || origin.includes("127.0.0.1") || origin.includes("replit.dev")) {
+      return callback(null, true);
+    }
+    return callback(new Error("Not allowed by CORS"));
+  }
+};
 
 app.use(cors({
-  origin: allowedOrigins,
+  origin: corsOrigin,
   credentials: true,
 }));
 
