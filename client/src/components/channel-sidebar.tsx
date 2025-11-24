@@ -170,7 +170,7 @@ export function ChannelSidebar({
                       const displayName = dm.isGroupChat && dm.name
                         ? dm.name
                         : otherParticipants.length > 0
-                        ? otherParticipants.map((p) => p.username).join(", ")
+                        ? otherParticipants.map((p) => p.username || (p.email ? p.email.split("@")[0] : "User")).join(", ")
                         : "Direct Message";
                       
                       const avatarUser = otherParticipants.length > 0 ? otherParticipants[0] : null;
@@ -195,7 +195,7 @@ export function ChannelSidebar({
                               <Avatar className="w-6 h-6">
                                 <AvatarImage src={avatarUser.avatar} />
                                 <AvatarFallback className="text-xs">
-                                  {avatarUser.username.substring(0, 2).toUpperCase()}
+                                  {(avatarUser.username || (avatarUser.email ? avatarUser.email.split("@")[0] : "U")).substring(0, 2).toUpperCase()}
                                 </AvatarFallback>
                               </Avatar>
                               <div
