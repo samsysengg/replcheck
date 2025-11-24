@@ -178,6 +178,8 @@ Following Microsoft Fluent Design principles with:
 ## Recent Changes
 
 **November 24, 2025 (Latest)**
+- Fixed SearchDialog query parameter passing - now properly uses URLSearchParams instead of stringifying objects in URL path
+- The global search (Cmd+K / Ctrl+K) now correctly finds all users including alphaideaspace when searching for partial usernames
 - Added `/api/users` endpoint to query all registered users in the database
 - Implemented smart chat pinning: chats with message history auto-pin to sidebar
 - Updated NewChatDialog with search functionality to find users by name/email

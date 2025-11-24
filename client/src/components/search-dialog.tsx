@@ -54,7 +54,20 @@ export function SearchDialog({
   const [activeTab, setActiveTab] = useState("all");
 
   const { data: results, isLoading } = useQuery<SearchResult>({
-    queryKey: ["/api/search", { q: query, type: activeTab }],
+    queryKey: ["/api/search", query, activeTab],
+    queryFn: async () => {
+      const params = new URLSearchParams({
+        q: query,
+        type: activeTab,
+      });
+      const response = await fetch(`/api/search?${params.toString()}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      if (!response.ok) throw new Error("Search failed");
+      return response.json();
+    },
     enabled: query.length >= 2,
   });
 
