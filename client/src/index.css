@@ -290,4 +290,28 @@
   .mirror {
     transform: scaleX(-1);
   }
+
+  /* Responsive typography for mobile */
+  @media (max-width: 640px) {
+    html {
+      @apply text-sm;
+    }
+  }
+
+  /* Scroll area styling */
+  ::-webkit-scrollbar {
+    @apply w-2 h-2;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-background;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-muted rounded;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-muted-foreground;
+  }
 }

@@ -45,16 +45,18 @@ function Router() {
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <SocketProvider>
-          <TooltipProvider>
-            <Toaster />
-            <Router />
-          </TooltipProvider>
-        </SocketProvider>
-      </AuthProvider>
-    </QueryClientProvider>
+    <div className="flex h-screen w-screen flex-col overflow-hidden bg-background">
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <SocketProvider>
+            <TooltipProvider>
+              <Toaster />
+              <Router />
+            </TooltipProvider>
+          </SocketProvider>
+        </AuthProvider>
+      </QueryClientProvider>
+    </div>
   );
 }
 

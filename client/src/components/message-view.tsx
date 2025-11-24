@@ -98,25 +98,25 @@ export function MessageView({
 
   return (
     <div className="flex flex-col flex-1 bg-background w-full h-full overflow-hidden">
-      <div className="flex items-center justify-between h-16 px-4 border-b border-border flex-shrink-0">
-        <div className="flex items-center gap-2">
+      <div className="flex items-center justify-between h-14 md:h-16 px-3 md:px-4 border-b border-border flex-shrink-0">
+        <div className="flex items-center gap-2 min-w-0 flex-1">
           {directMessage ? (
             directMessage.isGroupChat ? (
-              <Users className="w-5 h-5 text-foreground/70" />
+              <Users className="w-4 md:w-5 h-4 md:h-5 text-foreground/70 flex-shrink-0" />
             ) : (
-              <div className="w-5 h-5 text-foreground/70" />
+              <div className="w-4 md:w-5 h-4 md:h-5 text-foreground/70 flex-shrink-0" />
             )
           ) : channel?.isPrivate ? (
-            <Lock className="w-5 h-5 text-foreground/70" />
+            <Lock className="w-4 md:w-5 h-4 md:h-5 text-foreground/70 flex-shrink-0" />
           ) : (
-            <Hash className="w-5 h-5 text-foreground/70" />
+            <Hash className="w-4 md:w-5 h-4 md:h-5 text-foreground/70 flex-shrink-0" />
           )}
-          <div>
-            <h2 className="font-semibold text-foreground" data-testid="text-chat-title">
+          <div className="min-w-0 flex-1">
+            <h2 className="font-semibold text-sm md:text-base text-foreground truncate" data-testid="text-chat-title">
               {directMessage ? getDmDisplayName() : channel?.name}
             </h2>
             {channel?.description && (
-              <p className="text-xs text-muted-foreground">{channel.description}</p>
+              <p className="text-xs text-muted-foreground truncate">{channel.description}</p>
             )}
             {directMessage && directMessage.isGroupChat && (
               <p className="text-xs text-muted-foreground">
@@ -125,7 +125,7 @@ export function MessageView({
             )}
           </div>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1 md:gap-2 flex-shrink-0">
           <Button
             size="icon"
             variant="ghost"
@@ -165,8 +165,8 @@ export function MessageView({
         </div>
       </div>
 
-      <ScrollArea className="flex-1 w-full overflow-hidden" ref={scrollRef}>
-        <div className="px-4 py-4 space-y-4">
+      <div className="flex-1 w-full overflow-y-auto overflow-x-hidden" ref={scrollRef}>
+        <div className="px-3 md:px-4 py-4 space-y-3 md:space-y-4">
           {messages.length === 0 ? (
             <div className="text-center py-12">
               <p className="text-sm text-muted-foreground">
@@ -217,11 +217,11 @@ export function MessageView({
             })
           )}
         </div>
-      </ScrollArea>
+      </div>
 
-      <div className="p-4 border-t border-border flex-shrink-0">
+      <div className="p-2 md:p-3 border-t border-border flex-shrink-0 bg-background">
         <div className="flex items-end gap-2 w-full">
-          <div className="flex-1 bg-card rounded-lg border border-card-border p-3">
+          <div className="flex-1 bg-card rounded-lg border border-card-border p-2 md:p-3">
             <Input
               value={messageInput}
               onChange={(e) => setMessageInput(e.target.value)}
@@ -234,11 +234,11 @@ export function MessageView({
               className="border-0 focus-visible:ring-0 p-0 text-sm bg-transparent"
               data-testid="input-message"
             />
-            <div className="flex items-center gap-2 mt-2">
-              <Button size="icon" variant="ghost" className="h-8 w-8">
+            <div className="flex items-center gap-1 md:gap-2 mt-2">
+              <Button size="icon" variant="ghost" className="h-7 md:h-8 w-7 md:w-8">
                 <Paperclip className="w-4 h-4" />
               </Button>
-              <Button size="icon" variant="ghost" className="h-8 w-8">
+              <Button size="icon" variant="ghost" className="h-7 md:h-8 w-7 md:w-8">
                 <Smile className="w-4 h-4" />
               </Button>
             </div>
@@ -246,7 +246,8 @@ export function MessageView({
           <Button
             onClick={handleSendMessage}
             disabled={!messageInput.trim()}
-            className="h-auto py-3"
+            size="icon"
+            className="flex-shrink-0"
             data-testid="button-send-message"
           >
             <Send className="w-4 h-4" />
