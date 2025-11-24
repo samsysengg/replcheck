@@ -177,6 +177,20 @@ Following Microsoft Fluent Design principles with:
 
 ## Recent Changes
 
+**November 24, 2025**
+- Added Render deployment configuration (render.yaml) with health check endpoint
+- Implemented global search functionality (/api/search endpoint + SearchDialog component)
+- Added logout button to header with backend endpoint to update user status
+- Enhanced DirectMessage model to support group chats (isGroupChat, name fields)
+- Implemented chat functionality:
+  - POST /api/direct-messages - Create new DM or group chat
+  - POST /api/direct-messages/:id/participants - Add people to existing chats
+  - GET /api/direct-messages/:id/messages - Get DM message history
+- Added AddParticipantsDialog component for adding users to chats
+- Updated MessageView with audio/video call buttons for both channels and DMs
+- Enhanced ChannelSidebar to display group chats with proper icons and naming
+- Added comprehensive type safety with defensive checks for optional participants data
+
 **November 23, 2025**
 - Complete application built from scratch
 - MongoDB integration with Mongoose models
