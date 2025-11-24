@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { WorkspaceSidebar } from "@/components/workspace-sidebar";
-import { ChannelSidebar } from "@/components/channel-sidebar";
 import { MessageView } from "@/components/message-view";
 import { VideoCall } from "@/components/video-call";
 import { CreateWorkspaceDialog } from "@/components/create-workspace-dialog";
@@ -10,6 +8,7 @@ import { SearchDialog } from "@/components/search-dialog";
 import { AddParticipantsDialog } from "@/components/add-participants-dialog";
 import { NewChatDialog } from "@/components/new-chat-dialog";
 import { Button } from "@/components/ui/button";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSocket } from "@/contexts/SocketContext";
 import { useWebRTC } from "@/hooks/use-webrtc";
@@ -17,7 +16,7 @@ import { useToast } from "@/hooks/use-toast";
 import { queryClient, apiRequest } from "@/lib/queryClient";
 import { getAuthToken } from "@/lib/auth";
 import { Workspace, Channel, Message, DirectMessage, User } from "@shared/schema";
-import { Search, LogOut } from "lucide-react";
+import { Search, LogOut, Plus } from "lucide-react";
 
 export default function HomePage() {
   const { user, logout } = useAuth();
@@ -351,8 +350,27 @@ export default function HomePage() {
   return (
     <div className="flex h-full w-full flex-col bg-background">
       <header className="flex items-center justify-between px-3 md:px-4 py-2 border-b bg-card flex-shrink-0">
-        <h1 className="text-base md:text-lg font-semibold">TeamTalk</h1>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 min-w-0">
+          <h1 className="text-base md:text-lg font-semibold truncate">TeamTalk</h1>
+          {activeChannel && (
+            <span className="text-sm text-muted-foreground truncate ml-2">• {activeChannel.name}</span>
+          )}
+          {activeDm && (
+            <span className="text-sm text-muted-foreground truncate ml-2">
+              • {activeDm.isGroupChat && activeDm.name ? activeDm.name : activeDm.participants?.map((p) => p.username || p.email?.split("@")[0]).join(", ")}
+            </span>
+          )}
+        </div>
+        <div className="flex items-center gap-1 md:gap-2 flex-shrink-0">
+          <Button
+            size="icon"
+            variant="ghost"
+            onClick={() => setNewChatOpen(true)}
+            data-testid="button-new-chat"
+            className="hidden sm:flex"
+          >
+            <Plus className="h-5 w-5" />
+          </Button>
           <Button
             size="icon"
             variant="ghost"
@@ -361,6 +379,15 @@ export default function HomePage() {
           >
             <Search className="h-5 w-5" />
           </Button>
+          {user && (
+            <div className="hidden md:flex items-center gap-2 pl-2 border-l border-sidebar-border">
+              <Avatar className="h-8 w-8">
+                <AvatarImage src={user.avatar} />
+                <AvatarFallback>{(user.username?.substring(0, 2) || user.email?.substring(0, 2) || "U").toUpperCase()}</AvatarFallback>
+              </Avatar>
+              <span className="text-sm font-medium truncate max-w-[100px]">{user.username || user.email?.split("@")[0]}</span>
+            </div>
+          )}
           <Button
             size="icon"
             variant="ghost"
@@ -372,31 +399,6 @@ export default function HomePage() {
         </div>
       </header>
       <div className="flex flex-1 overflow-hidden min-h-0 w-full">
-        <WorkspaceSidebar
-          workspaces={workspaces}
-          activeWorkspaceId={activeWorkspaceId}
-          onWorkspaceSelect={setActiveWorkspaceId}
-          onCreateWorkspace={() => setCreateWorkspaceOpen(true)}
-        />
-        <ChannelSidebar
-          workspace={activeWorkspace}
-          channels={channels}
-          directMessages={directMessages}
-          activeChannelId={activeChannelId}
-          activeDmId={activeDmId}
-          onChannelSelect={(id) => {
-            setActiveChannelId(id);
-            setActiveDmId(null);
-          }}
-          onDmSelect={(id) => {
-            setActiveDmId(id);
-            setActiveChannelId(null);
-          }}
-          onCreateChannel={() => setCreateChannelOpen(true)}
-          onNewChat={() => setNewChatOpen(true)}
-          currentUser={user}
-          dmMessageCounts={dmMessageCounts}
-        />
         <MessageView
           channel={activeChannel}
           directMessage={activeDm}
