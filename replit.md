@@ -178,6 +178,11 @@ Following Microsoft Fluent Design principles with:
 ## Recent Changes
 
 **November 24, 2025 (Latest)**
+- **Implemented real-time DM synchronization**: Messages now sync across all participants in real-time via Socket.io
+- **Added DM room broadcasting**: Backend broadcasts DM messages to all participants, not just sender
+- **Added new DM notifications**: When a DM is created, all participants are notified via Socket.io and DM appears in their list
+- **Socket.io room management**: Users automatically join personal rooms for receiving notifications
+- **Frontend Socket.io listeners**: Added handlers for new DMs and DM messages to update UI in real-time
 - **Fixed critical chat navigation bug**: Added `!activeDmId` check to auto-select logic so channels don't override active DMs
 - **Redesigned sidebar navigation**: Replaced collapsible sections with clean toggled tabs for "Channels" and "Direct Messages"
 - **Removed workspace label**: Simplified header by removing workspace name selector for cleaner UI

@@ -449,6 +449,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
         io.to(`channel:${channelId}`).emit("new_message", messageResponse);
       }
 
+      if (directMessageId) {
+        // Broadcast DM message to all participants in this DM
+        io.to(`dm:${directMessageId}`).emit("new_message", messageResponse);
+      }
+
       res.json(messageResponse);
     } catch (error) {
       console.error("Send message error:", error);
@@ -547,7 +552,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         _id: { $in: dm.participantIds },
       });
 
-      res.json({
+      const dmResponse = {
         _id: dm._id.toString(),
         participantIds: dm.participantIds.map((id) => id.toString()),
         participants: participants.map((p) => ({
@@ -561,7 +566,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
         name: dm.name,
         isGroupChat: dm.isGroupChat,
         createdAt: dm.createdAt,
-      });
+      };
+
+      // Notify all participants that a new DM has been created
+      for (const participantId of allParticipantIds) {
+        io.to(`user:${participantId.toString()}`).emit("new_dm", dmResponse);
+      }
+
+      res.json(dmResponse);
     } catch (error) {
       console.error("Create DM error:", error);
       res.status(500).json({ message: "Server error" });
@@ -654,6 +666,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
   io.on("connection", (socket) => {
     console.log("Client connected:", socket.id);
 
+    // Join user room for personal notifications
+    const userId = socket.data.userId;
+    if (userId) {
+      socket.join(`user:${userId}`);
+      console.log(`Socket ${socket.id} joined user room for ${userId}`);
+    }
+
     socket.on("join_channel", (channelId: string) => {
       socket.join(`channel:${channelId}`);
       console.log(`Socket ${socket.id} joined channel ${channelId}`);
@@ -662,6 +681,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
     socket.on("leave_channel", (channelId: string) => {
       socket.leave(`channel:${channelId}`);
       console.log(`Socket ${socket.id} left channel ${channelId}`);
+    });
+
+    socket.on("join_dm", (dmId: string) => {
+      socket.join(`dm:${dmId}`);
+      console.log(`Socket ${socket.id} joined DM ${dmId}`);
+    });
+
+    socket.on("leave_dm", (dmId: string) => {
+      socket.leave(`dm:${dmId}`);
+      console.log(`Socket ${socket.id} left DM ${dmId}`);
     });
 
     socket.on("webrtc_offer", ({ to, offer }) => {

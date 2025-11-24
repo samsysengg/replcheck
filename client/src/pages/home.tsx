@@ -224,6 +224,52 @@ export default function HomePage() {
     };
   }, [socket, activeChannelId]);
 
+  // Handle DM socket events
+  useEffect(() => {
+    if (!socket || !activeDmId) return;
+
+    socket.emit("join_dm", activeDmId);
+
+    const handleNewDmMessage = (message: Message) => {
+      queryClient.setQueryData<Message[]>(["/api/direct-messages", activeDmId, "messages"], (old) => {
+        if (!old) return [message];
+        const exists = old.some((m) => m._id === message._id);
+        return exists ? old : [...old, message];
+      });
+    };
+
+    socket.on("new_message", handleNewDmMessage);
+
+    return () => {
+      socket.emit("leave_dm", activeDmId);
+      socket.off("new_message", handleNewDmMessage);
+    };
+  }, [socket, activeDmId]);
+
+  // Listen for new DMs created by other users
+  useEffect(() => {
+    if (!socket) return;
+
+    const handleNewDm = (newDm: ExtendedDirectMessage) => {
+      if (!activeWorkspaceId) return;
+      
+      queryClient.setQueryData<ExtendedDirectMessage[]>(
+        ["/api/direct-messages", activeWorkspaceId],
+        (old) => {
+          if (!old) return [newDm];
+          const exists = old.some((dm) => dm._id === newDm._id);
+          return exists ? old : [...old, newDm];
+        }
+      );
+    };
+
+    socket.on("new_dm", handleNewDm);
+
+    return () => {
+      socket.off("new_dm", handleNewDm);
+    };
+  }, [socket, activeWorkspaceId]);
+
   const activeWorkspace = workspaces.find((w) => w._id === activeWorkspaceId) || null;
   const activeChannel = channels.find((c) => c._id === activeChannelId) || null;
   const activeDm = directMessages.find((dm) => dm._id === activeDmId) || null;
