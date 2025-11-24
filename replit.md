@@ -178,6 +178,12 @@ Following Microsoft Fluent Design principles with:
 ## Recent Changes
 
 **November 24, 2025 (Latest)**
+- **Fixed critical chat navigation bug**: Added `!activeDmId` check to auto-select logic so channels don't override active DMs
+- **Redesigned sidebar navigation**: Replaced collapsible sections with clean toggled tabs for "Channels" and "Direct Messages"
+- **Removed workspace label**: Simplified header by removing workspace name selector for cleaner UI
+- **Enhanced profile display**: Current logged-in username now prominently displayed in profile section at bottom of sidebar
+- **Fixed message routing issue**: Messages now correctly post to 1-on-1 chats instead of being routed to general channel
+- **Improved chat creation flow**: New chats now properly navigate to chat window with correct message display
 - Fixed DM creation and navigation: Cache now updates immediately with new DM so it appears in sidebar
 - Fixed "Start Chat" dialog not opening chat window: Added optimistic cache update for new DMs
 - Fixed 401 (Unauthorized) errors when fetching DM message counts: Now uses proper getAuthToken() auth helper instead of direct localStorage access

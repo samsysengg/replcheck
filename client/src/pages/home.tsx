@@ -200,10 +200,10 @@ export default function HomePage() {
   }, [workspaces, activeWorkspaceId]);
 
   useEffect(() => {
-    if (channels.length > 0 && !activeChannelId && activeWorkspaceId) {
+    if (channels.length > 0 && !activeChannelId && !activeDmId && activeWorkspaceId) {
       setActiveChannelId(channels[0]._id);
     }
-  }, [channels, activeChannelId, activeWorkspaceId]);
+  }, [channels, activeChannelId, activeDmId, activeWorkspaceId]);
 
   useEffect(() => {
     if (!socket || !activeChannelId) return;
