@@ -133,8 +133,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       try {
         const { email, password } = req.body;
 
-        const user = await UserModel.findOne({ email });
-        if (!user) {
+        const user = await UserModel.findOne({ email }).select("+password");
+        if (!user || !user.password) {
           return res.status(401).json({ message: "Invalid credentials" });
         }
 
