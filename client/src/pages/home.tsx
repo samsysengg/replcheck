@@ -58,6 +58,11 @@ export default function HomePage() {
     enabled: !!activeWorkspaceId,
   });
 
+  const { data: workspaceUsers = [] } = useQuery<User[]>({
+    queryKey: ["/api/workspace-members", activeWorkspaceId],
+    enabled: !!activeWorkspaceId,
+  });
+
   const { data: dmMessages = [] } = useQuery<Message[]>({
     queryKey: ["/api/direct-messages", activeDmId, "messages"],
     enabled: !!activeDmId,
@@ -213,20 +218,13 @@ export default function HomePage() {
   const activeDm = directMessages.find((dm) => dm._id === activeDmId) || null;
 
   const usersMap = new Map<string, User>();
-  const allUsers: User[] = [];
-  
   if (user) {
     usersMap.set(user._id, user);
-    allUsers.push(user);
   }
-  
   directMessages.forEach((dm) => {
     if (dm.participants && Array.isArray(dm.participants)) {
       dm.participants.forEach((participant) => {
-        if (!usersMap.has(participant._id)) {
-          usersMap.set(participant._id, participant);
-          allUsers.push(participant);
-        }
+        usersMap.set(participant._id, participant);
       });
     }
   });
@@ -385,7 +383,7 @@ export default function HomePage() {
         <NewChatDialog
           open={newChatOpen}
           onOpenChange={setNewChatOpen}
-          users={allUsers}
+          users={workspaceUsers}
           currentUserId={user._id}
           onSelectUser={handleSelectUser}
           isLoading={createDmMutation.isPending}

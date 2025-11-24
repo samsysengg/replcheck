@@ -267,6 +267,34 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.get("/api/workspace-members/:workspaceId", authenticate, async (req: AuthRequest, res) => {
+    try {
+      const { workspaceId } = req.params;
+
+      const workspace = await WorkspaceModel.findById(workspaceId);
+      if (!workspace) {
+        return res.status(404).json({ message: "Workspace not found" });
+      }
+
+      const users = await UserModel.find({
+        _id: { $in: workspace.memberIds, $ne: req.userId },
+      }).select("_id username email avatar status");
+
+      const usersResponse = users.map((u) => ({
+        _id: u._id.toString(),
+        username: u.username,
+        email: u.email,
+        avatar: u.avatar,
+        status: u.status,
+      }));
+
+      res.json(usersResponse);
+    } catch (error) {
+      console.error("Get workspace members error:", error);
+      res.status(500).json({ message: "Server error" });
+    }
+  });
+
   app.post("/api/workspaces", authenticate, async (req: AuthRequest, res) => {
     try {
       const { name, description } = req.body;
