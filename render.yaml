@@ -2,8 +2,8 @@ services:
   - type: web
     name: teamtalk
     runtime: node
-    plan: free
-    buildCommand: npm install && npm run build
+    plan: standard
+    buildCommand: npm ci && npm run build
     startCommand: npm start
     envVars:
       - key: NODE_ENV
@@ -17,4 +17,8 @@ services:
       - key: SESSION_SECRET
         generateValue: true
     healthCheckPath: /api/health
+    healthCheckTimeout: 30
+    preDeployCommand: echo "Deployment started"
     autoDeploy: true
+    maxInstances: 2
+    minInstances: 1

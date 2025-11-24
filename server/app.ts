@@ -38,12 +38,19 @@ const corsOrigin = (origin: string | undefined, callback: (err: Error | null, al
   }
   
   if (process.env.NODE_ENV === "production") {
-    if (origin.endsWith(".replit.app") || origin.endsWith(".replit.dev")) {
+    if (origin.endsWith(".replit.app") || 
+        origin.endsWith(".replit.dev") ||
+        origin.endsWith(".render.app") ||
+        origin.endsWith(".onrender.com")) {
       return callback(null, true);
     }
     return callback(new Error("Not allowed by CORS"));
   } else {
-    if (origin.includes("localhost") || origin.includes("127.0.0.1") || origin.includes("replit.dev")) {
+    if (origin.includes("localhost") || 
+        origin.includes("127.0.0.1") || 
+        origin.includes("replit.dev") ||
+        origin.includes("render.app") ||
+        origin.includes("onrender.com")) {
       return callback(null, true);
     }
     return callback(new Error("Not allowed by CORS"));

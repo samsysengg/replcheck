@@ -253,12 +253,41 @@ Following Microsoft Fluent Design principles with:
 - MongoDB for data persistence
 - Real Teams-like experience
 
+## Deployment
+
+### Production Deployment to Render
+
+TeamTalk is fully configured for production deployment on Render.com:
+
+**Deployment Files:**
+- `render.yaml` - Render deployment configuration
+- `RENDER_DEPLOYMENT_GUIDE.md` - Complete step-by-step deployment guide
+- `MONGODB_ATLAS_SETUP.md` - MongoDB Atlas configuration instructions
+
+**Quick Start:**
+1. Create MongoDB Atlas free cluster
+2. Get MongoDB connection string
+3. Push code to GitHub
+4. Connect GitHub to Render
+5. Add environment variables (MONGO_URI, etc.)
+6. Deploy with auto-deploy enabled
+
+**Features:**
+✅ Automatic builds on GitHub push
+✅ Environment variables auto-generated
+✅ Health check endpoint enabled
+✅ CORS configured for Render domains
+✅ Production-ready build process
+✅ Socket.io support on Render
+
+See `RENDER_DEPLOYMENT_GUIDE.md` for detailed instructions.
+
 ## Next Steps (Post-MVP)
 - File upload and sharing
 - Screen sharing in video calls
 - Message reactions and threads
-- User search and invitations
+- User search and invitations (partial implementation done)
 - Notification system
 - Admin dashboard
 - Message search functionality
-- Mobile responsive enhancements
+- Dark mode toggle (UI ready, needs persistence)
