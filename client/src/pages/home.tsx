@@ -149,9 +149,19 @@ export default function HomePage() {
   const createDmMutation = useMutation({
     mutationFn: (data: { workspaceId: string; userIds: string[]; name?: string }) =>
       apiRequest("POST", "/api/direct-messages", data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/direct-messages", activeWorkspaceId] });
+    onSuccess: (newDm: ExtendedDirectMessage) => {
+      // Update the cache immediately with the new DM
+      queryClient.setQueryData<ExtendedDirectMessage[]>(
+        ["/api/direct-messages", activeWorkspaceId],
+        (old) => {
+          if (!old) return [newDm];
+          const exists = old.some((dm) => dm._id === newDm._id);
+          return exists ? old : [...old, newDm];
+        }
+      );
       toast({ title: "Success", description: "Chat created successfully" });
+      // Also refetch to ensure consistency
+      queryClient.invalidateQueries({ queryKey: ["/api/direct-messages", activeWorkspaceId] });
     },
     onError: () => {
       toast({ title: "Error", description: "Failed to create chat", variant: "destructive" });

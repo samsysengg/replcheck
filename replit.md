@@ -178,6 +178,8 @@ Following Microsoft Fluent Design principles with:
 ## Recent Changes
 
 **November 24, 2025 (Latest)**
+- Fixed DM creation and navigation: Cache now updates immediately with new DM so it appears in sidebar
+- Fixed "Start Chat" dialog not opening chat window: Added optimistic cache update for new DMs
 - Fixed MessageView crash when displaying user avatars: Added fallback for undefined usernames in avatar display
 - Users with missing username fields now use email local part as fallback in message author names and avatars
 - Fixed ChannelSidebar crash when filtering DMs: Added defensive check for undefined usernames before .toLowerCase() call
@@ -187,21 +189,18 @@ Following Microsoft Fluent Design principles with:
 - Fixed chat navigation mutation: Corrected TanStack Query v5 mutation pattern - data flows from mutationFn directly to mutateAsync(), not from onSuccess callback
 - Now properly navigates to chat screen when clicking "Start Chat" and selecting a user
 - Fixed 502 Bad Gateway transient errors with proper mutation state handling
-- Fixed "Start Chat" navigation: createDmMutation now properly returns result data for immediate UI update
 - Fixed UI layout to fill entire browser window: removed h-screen from nested MessageView, now uses flex-1 for proper responsiveness
 - Added flex-shrink-0 to MessageView header and input footer to prevent height collapse
 - Made MessageView fully responsive with proper overflow handling (h-full, w-full, overflow-hidden)
 - Fixed ScrollArea width to fill container (w-full) instead of adding px padding which could cause overflow
 - UI now properly fits within window height and width, fully responsive to device size
 - Fixed SearchDialog query parameter passing - now properly uses URLSearchParams instead of stringifying objects in URL path
-- The global search (Cmd+K / Ctrl+K) now correctly finds all users including alphaideaspace when searching for partial usernames
-- Fixed `/api/users` endpoint to show user emails as fallback when username is missing (ensures all users display with meaningful names)
-- Added `/api/users` endpoint to query all registered users in the database
+- The global search (Cmd+K / Ctrl+K) now correctly finds all users including partial usernames
+- Fixed `/api/users` endpoint to show user emails as fallback when username is missing
 - Implemented smart chat pinning: chats with message history auto-pin to sidebar
 - Updated NewChatDialog with search functionality to find users by name/email
 - Added message count tracking for automatic chat pinning when conversation starts
-- Fixed workspace members query to fetch all users instead of just workspace members
-- Enhanced user discovery: now can search and message any registered user
+- Enhanced user discovery: can now search and message any registered user
 - Added defensive checks in NewChatDialog for missing user data (username, email)
 
 **November 24, 2025**
