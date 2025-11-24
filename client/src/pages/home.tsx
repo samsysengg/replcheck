@@ -58,9 +58,8 @@ export default function HomePage() {
     enabled: !!activeWorkspaceId,
   });
 
-  const { data: workspaceUsers = [] } = useQuery<User[]>({
-    queryKey: ["/api/workspace-members", activeWorkspaceId],
-    enabled: !!activeWorkspaceId,
+  const { data: allUsers = [] } = useQuery<User[]>({
+    queryKey: ["/api/users"],
   });
 
   const { data: dmMessages = [] } = useQuery<Message[]>({
@@ -383,7 +382,7 @@ export default function HomePage() {
         <NewChatDialog
           open={newChatOpen}
           onOpenChange={setNewChatOpen}
-          users={workspaceUsers}
+          users={allUsers}
           currentUserId={user._id}
           onSelectUser={handleSelectUser}
           isLoading={createDmMutation.isPending}
