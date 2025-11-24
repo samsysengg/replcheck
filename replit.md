@@ -180,12 +180,14 @@ Following Microsoft Fluent Design principles with:
 **November 24, 2025 (Latest)**
 - Fixed SearchDialog query parameter passing - now properly uses URLSearchParams instead of stringifying objects in URL path
 - The global search (Cmd+K / Ctrl+K) now correctly finds all users including alphaideaspace when searching for partial usernames
+- Fixed `/api/users` endpoint to show user emails as fallback when username is missing (ensures all users display with meaningful names)
 - Added `/api/users` endpoint to query all registered users in the database
 - Implemented smart chat pinning: chats with message history auto-pin to sidebar
 - Updated NewChatDialog with search functionality to find users by name/email
 - Added message count tracking for automatic chat pinning when conversation starts
 - Fixed workspace members query to fetch all users instead of just workspace members
 - Enhanced user discovery: now can search and message any registered user
+- Added defensive checks in NewChatDialog for missing user data (username, email)
 
 **November 24, 2025**
 - Added Render deployment configuration (render.yaml) with health check endpoint

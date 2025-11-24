@@ -275,7 +275,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const usersResponse = users.map((u) => ({
         _id: u._id.toString(),
-        username: u.username,
+        username: u.username || u.email?.split("@")[0] || "User",
         email: u.email,
         avatar: u.avatar,
         status: u.status,
