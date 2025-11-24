@@ -180,6 +180,8 @@ Following Microsoft Fluent Design principles with:
 **November 24, 2025 (Latest)**
 - Fixed DM creation and navigation: Cache now updates immediately with new DM so it appears in sidebar
 - Fixed "Start Chat" dialog not opening chat window: Added optimistic cache update for new DMs
+- Fixed 401 (Unauthorized) errors when fetching DM message counts: Now uses proper getAuthToken() auth helper instead of direct localStorage access
+- Chat creation flow now works end-to-end: Create room → Add 2 users → Navigate to chat window
 - Fixed MessageView crash when displaying user avatars: Added fallback for undefined usernames in avatar display
 - Users with missing username fields now use email local part as fallback in message author names and avatars
 - Fixed ChannelSidebar crash when filtering DMs: Added defensive check for undefined usernames before .toLowerCase() call

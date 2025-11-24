@@ -15,6 +15,7 @@ import { useSocket } from "@/contexts/SocketContext";
 import { useWebRTC } from "@/hooks/use-webrtc";
 import { useToast } from "@/hooks/use-toast";
 import { queryClient, apiRequest } from "@/lib/queryClient";
+import { getAuthToken } from "@/lib/auth";
 import { Workspace, Channel, Message, DirectMessage, User } from "@shared/schema";
 import { Search, LogOut } from "lucide-react";
 
@@ -73,6 +74,7 @@ export default function HomePage() {
   useEffect(() => {
     const fetchMessageCounts = async () => {
       const counts = new Map<string, number>();
+      const token = getAuthToken();
       
       for (const dm of directMessages) {
         try {
@@ -80,7 +82,7 @@ export default function HomePage() {
             `/api/direct-messages/${dm._id}/messages`,
             {
               headers: {
-                Authorization: `Bearer ${localStorage.getItem("token")}`,
+                Authorization: token ? `Bearer ${token}` : "",
               },
             }
           );
