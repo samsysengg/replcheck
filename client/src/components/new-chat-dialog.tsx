@@ -38,8 +38,8 @@ export function NewChatDialog({
     if (!searchQuery.trim()) return otherUsers;
     const query = searchQuery.toLowerCase();
     return otherUsers.filter((u) =>
-      u.username.toLowerCase().includes(query) ||
-      u.email.toLowerCase().includes(query)
+      (u.username || "").toLowerCase().includes(query) ||
+      (u.email || "").toLowerCase().includes(query)
     );
   }, [otherUsers, searchQuery]);
 

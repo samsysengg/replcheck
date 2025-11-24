@@ -1,0 +1,56 @@
+chunk-RPCDYKBN.js?v=6aef5939:21551 Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools
+SocketContext.tsx:37 Socket connected
+new-chat-dialog.tsx:41 Uncaught TypeError: Cannot read properties of undefined (reading 'toLowerCase')
+    at new-chat-dialog.tsx:41:18
+    at Array.filter (<anonymous>)
+    at new-chat-dialog.tsx:40:23
+    at updateMemo (chunk-RPCDYKBN.js?v=6aef5939:12210:27)
+    at Object.useMemo (chunk-RPCDYKBN.js?v=6aef5939:12726:24)
+    at useMemo (chunk-QCHXOAYK.js?v=6aef5939:1094:29)
+    at NewChatDialog (new-chat-dialog.tsx:37:25)
+    at renderWithHooks (chunk-RPCDYKBN.js?v=6aef5939:11548:26)
+    at updateFunctionComponent (chunk-RPCDYKBN.js?v=6aef5939:14582:28)
+    at beginWork (chunk-RPCDYKBN.js?v=6aef5939:15924:22)
+new-chat-dialog.tsx:41 Uncaught TypeError: Cannot read properties of undefined (reading 'toLowerCase')
+    at new-chat-dialog.tsx:41:18
+    at Array.filter (<anonymous>)
+    at new-chat-dialog.tsx:40:23
+    at updateMemo (chunk-RPCDYKBN.js?v=6aef5939:12210:27)
+    at Object.useMemo (chunk-RPCDYKBN.js?v=6aef5939:12726:24)
+    at useMemo (chunk-QCHXOAYK.js?v=6aef5939:1094:29)
+    at NewChatDialog (new-chat-dialog.tsx:37:25)
+    at renderWithHooks (chunk-RPCDYKBN.js?v=6aef5939:11548:26)
+    at updateFunctionComponent (chunk-RPCDYKBN.js?v=6aef5939:14582:28)
+    at beginWork (chunk-RPCDYKBN.js?v=6aef5939:15924:22)
+chunk-RPCDYKBN.js?v=6aef5939:14032 The above error occurred in the <NewChatDialog> component:
+
+    at NewChatDialog (https://7a12763b-fdce-4c1e-a625-10d2184551e0-00-3ph89qga47n4p.picard.replit.dev/src/components/new-chat-dialog.tsx:31:3)
+    at div
+    at div
+    at HomePage (https://7a12763b-fdce-4c1e-a625-10d2184551e0-00-3ph89qga47n4p.picard.replit.dev/src/pages/home.tsx:38:28)
+    at PrivateRoute (https://7a12763b-fdce-4c1e-a625-10d2184551e0-00-3ph89qga47n4p.picard.replit.dev/src/App.tsx?v=VBBxVm6_NclWZYYzPr76r:28:36)
+    at Route (https://7a12763b-fdce-4c1e-a625-10d2184551e0-00-3ph89qga47n4p.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=6aef5939:206:16)
+    at Switch (https://7a12763b-fdce-4c1e-a625-10d2184551e0-00-3ph89qga47n4p.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=6aef5939:262:17)
+    at Router
+    at Provider (https://7a12763b-fdce-4c1e-a625-10d2184551e0-00-3ph89qga47n4p.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-66JOO7XH.js?v=6aef5939:44:15)
+    at TooltipProvider (https://7a12763b-fdce-4c1e-a625-10d2184551e0-00-3ph89qga47n4p.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=6aef5939:2350:5)
+    at SocketProvider (https://7a12763b-fdce-4c1e-a625-10d2184551e0-00-3ph89qga47n4p.picard.replit.dev/src/contexts/SocketContext.tsx:23:34)
+    at AuthProvider (https://7a12763b-fdce-4c1e-a625-10d2184551e0-00-3ph89qga47n4p.picard.replit.dev/src/contexts/AuthContext.tsx:21:32)
+    at QueryClientProvider (https://7a12763b-fdce-4c1e-a625-10d2184551e0-00-3ph89qga47n4p.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@tanstack_react-query.js?v=6aef5939:3093:3)
+    at App
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+logCapturedError @ chunk-RPCDYKBN.js?v=6aef5939:14032
+chunk-RPCDYKBN.js?v=6aef5939:9129 Uncaught TypeError: Cannot read properties of undefined (reading 'toLowerCase')
+    at new-chat-dialog.tsx:41:18
+    at Array.filter (<anonymous>)
+    at new-chat-dialog.tsx:40:23
+    at updateMemo (chunk-RPCDYKBN.js?v=6aef5939:12210:27)
+    at Object.useMemo (chunk-RPCDYKBN.js?v=6aef5939:12726:24)
+    at useMemo (chunk-QCHXOAYK.js?v=6aef5939:1094:29)
+    at NewChatDialog (new-chat-dialog.tsx:37:25)
+    at renderWithHooks (chunk-RPCDYKBN.js?v=6aef5939:11548:26)
+    at updateFunctionComponent (chunk-RPCDYKBN.js?v=6aef5939:14582:28)
+    at beginWork (chunk-RPCDYKBN.js?v=6aef5939:15924:22)
+SocketContext.tsx:42 Socket disconnected
