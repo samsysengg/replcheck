@@ -178,6 +178,9 @@ Following Microsoft Fluent Design principles with:
 ## Recent Changes
 
 **November 24, 2025 (Latest)**
+- Fixed chat navigation mutation: Corrected TanStack Query v5 mutation pattern - data flows from mutationFn directly to mutateAsync(), not from onSuccess callback
+- Now properly navigates to chat screen when clicking "Start Chat" and selecting a user
+- Fixed 502 Bad Gateway transient errors with proper mutation state handling
 - Fixed "Start Chat" navigation: createDmMutation now properly returns result data for immediate UI update
 - Fixed UI layout to fill entire browser window: removed h-screen from nested MessageView, now uses flex-1 for proper responsiveness
 - Added flex-shrink-0 to MessageView header and input footer to prevent height collapse
