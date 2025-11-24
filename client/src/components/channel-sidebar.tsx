@@ -25,6 +25,7 @@ interface ChannelSidebarProps {
   onCreateChannel: () => void;
   onNewChat: () => void;
   currentUser: User | null;
+  dmMessageCounts?: Map<string, number>;
 }
 
 export function ChannelSidebar({
@@ -38,6 +39,7 @@ export function ChannelSidebar({
   onCreateChannel,
   onNewChat,
   currentUser,
+  dmMessageCounts = new Map(),
 }: ChannelSidebarProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [channelsOpen, setChannelsOpen] = useState(true);
@@ -65,6 +67,10 @@ export function ChannelSidebar({
       p.username.toLowerCase().includes(searchQuery.toLowerCase())
     );
   });
+
+  // Separate pinned chats (with message history) from unpinned ones
+  const pinnedDms = filteredDms.filter((dm) => (dmMessageCounts.get(dm._id) || 0) > 0);
+  const unpinnedDms = filteredDms.filter((dm) => (dmMessageCounts.get(dm._id) || 0) === 0);
 
   return (
     <div className="flex flex-col h-screen w-72 bg-sidebar border-r border-sidebar-border">
@@ -152,62 +158,69 @@ export function ChannelSidebar({
                 <Plus className="w-3 h-3" />
               </Button>
             </div>
-            <CollapsibleContent className="space-y-0.5 mt-1">
-              {filteredDms.map((dm) => {
-                const participants = dm.participants || [];
-                const otherParticipants = participants.filter((p) => p._id !== currentUser._id);
-                const displayName = dm.isGroupChat && dm.name
-                  ? dm.name
-                  : otherParticipants.length > 0
-                  ? otherParticipants.map((p) => p.username).join(", ")
-                  : "Direct Message";
-                
-                const avatarUser = otherParticipants.length > 0 ? otherParticipants[0] : null;
+            <CollapsibleContent className="space-y-3 mt-1">
+              {pinnedDms.length > 0 && (
+                <div>
+                  <p className="text-xs text-muted-foreground px-2 py-1 font-semibold">Pinned</p>
+                  <div className="space-y-0.5">
+                    {pinnedDms.map((dm) => {
+                      const participants = dm.participants || [];
+                      const otherParticipants = participants.filter((p) => p._id !== currentUser._id);
+                      const displayName = dm.isGroupChat && dm.name
+                        ? dm.name
+                        : otherParticipants.length > 0
+                        ? otherParticipants.map((p) => p.username).join(", ")
+                        : "Direct Message";
+                      
+                      const avatarUser = otherParticipants.length > 0 ? otherParticipants[0] : null;
 
-                return (
-                  <button
-                    key={dm._id}
-                    onClick={() => onDmSelect(dm._id)}
-                    className={`w-full flex items-center gap-2 px-2 py-1.5 rounded-md text-sm hover-elevate ${
-                      activeDmId === dm._id
-                        ? "bg-sidebar-accent text-sidebar-accent-foreground"
-                        : "text-sidebar-foreground/80"
-                    }`}
-                    data-testid={`button-dm-${dm._id}`}
-                  >
-                    {dm.isGroupChat ? (
-                      <div className="w-6 h-6 rounded-full bg-muted flex items-center justify-center flex-shrink-0">
-                        <Users className="w-3 h-3" />
-                      </div>
-                    ) : avatarUser ? (
-                      <div className="relative">
-                        <Avatar className="w-6 h-6">
-                          <AvatarImage src={avatarUser.avatar} />
-                          <AvatarFallback className="text-xs">
-                            {avatarUser.username.substring(0, 2).toUpperCase()}
-                          </AvatarFallback>
-                        </Avatar>
-                        <div
-                          className={`absolute bottom-0 right-0 w-2 h-2 rounded-full border border-sidebar ${
-                            avatarUser.status === "online"
-                              ? "bg-status-online"
-                              : avatarUser.status === "away"
-                              ? "bg-status-away"
-                              : avatarUser.status === "busy"
-                              ? "bg-status-busy"
-                              : "bg-status-offline"
+                      return (
+                        <button
+                          key={dm._id}
+                          onClick={() => onDmSelect(dm._id)}
+                          className={`w-full flex items-center gap-2 px-2 py-1.5 rounded-md text-sm hover-elevate ${
+                            activeDmId === dm._id
+                              ? "bg-sidebar-accent text-sidebar-accent-foreground"
+                              : "text-sidebar-foreground/80"
                           }`}
-                        />
-                      </div>
-                    ) : (
-                      <div className="w-6 h-6 rounded-full bg-muted" />
-                    )}
-                    <span className="truncate flex-1 text-left">{displayName}</span>
-                  </button>
-                );
-              })}
-              {filteredDms.length === 0 && (
-                <p className="text-xs text-muted-foreground px-2 py-2">No direct messages</p>
+                          data-testid={`button-dm-${dm._id}`}
+                        >
+                          {dm.isGroupChat ? (
+                            <div className="w-6 h-6 rounded-full bg-muted flex items-center justify-center flex-shrink-0">
+                              <Users className="w-3 h-3" />
+                            </div>
+                          ) : avatarUser ? (
+                            <div className="relative">
+                              <Avatar className="w-6 h-6">
+                                <AvatarImage src={avatarUser.avatar} />
+                                <AvatarFallback className="text-xs">
+                                  {avatarUser.username.substring(0, 2).toUpperCase()}
+                                </AvatarFallback>
+                              </Avatar>
+                              <div
+                                className={`absolute bottom-0 right-0 w-2 h-2 rounded-full border border-sidebar ${
+                                  avatarUser.status === "online"
+                                    ? "bg-status-online"
+                                    : avatarUser.status === "away"
+                                    ? "bg-status-away"
+                                    : avatarUser.status === "busy"
+                                    ? "bg-status-busy"
+                                    : "bg-status-offline"
+                                }`}
+                              />
+                            </div>
+                          ) : (
+                            <div className="w-6 h-6 rounded-full bg-muted" />
+                          )}
+                          <span className="truncate flex-1 text-left">{displayName}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+              {pinnedDms.length === 0 && unpinnedDms.length === 0 && (
+                <p className="text-xs text-muted-foreground px-2 py-2">Start a chat to see it here</p>
               )}
             </CollapsibleContent>
           </Collapsible>

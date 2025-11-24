@@ -63,6 +63,41 @@ export default function HomePage() {
     enabled: !!activeDmId,
   });
 
+  const [dmMessageCounts, setDmMessageCounts] = useState<Map<string, number>>(new Map());
+
+  // Fetch and track message counts for each DM
+  useEffect(() => {
+    const fetchMessageCounts = async () => {
+      const counts = new Map<string, number>();
+      
+      for (const dm of directMessages) {
+        try {
+          const response = await fetch(
+            `/api/direct-messages/${dm._id}/messages`,
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+            }
+          );
+          
+          if (response.ok) {
+            const messages = await response.json();
+            counts.set(dm._id, Array.isArray(messages) ? messages.length : 0);
+          }
+        } catch (error) {
+          counts.set(dm._id, 0);
+        }
+      }
+      
+      setDmMessageCounts(counts);
+    };
+
+    if (directMessages.length > 0) {
+      fetchMessageCounts();
+    }
+  }, [directMessages]);
+
   const createWorkspaceMutation = useMutation({
     mutationFn: (data: { name: string; description?: string }) =>
       apiRequest("POST", "/api/workspaces", { ...data, ownerId: user?._id }),
@@ -305,6 +340,7 @@ export default function HomePage() {
           onCreateChannel={() => setCreateChannelOpen(true)}
           onNewChat={() => setNewChatOpen(true)}
           currentUser={user}
+          dmMessageCounts={dmMessageCounts}
         />
         <MessageView
           channel={activeChannel}
