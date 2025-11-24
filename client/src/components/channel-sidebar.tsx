@@ -63,9 +63,10 @@ export function ChannelSidebar({
       return false;
     }
     const otherParticipants = dm.participants.filter((p) => p._id !== currentUser._id);
-    return otherParticipants.some((p) =>
-      p.username.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    return otherParticipants.some((p) => {
+      const displayName = p.username || (p.email ? p.email.split("@")[0] : "");
+      return displayName.toLowerCase().includes(searchQuery.toLowerCase());
+    });
   });
 
   // Separate pinned chats (with message history) from unpinned ones

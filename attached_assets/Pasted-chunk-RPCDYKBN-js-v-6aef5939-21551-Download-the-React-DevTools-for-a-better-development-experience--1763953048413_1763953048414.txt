@@ -1,0 +1,259 @@
+chunk-RPCDYKBN.js?v=6aef5939:21551 Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools
+SocketContext.tsx:37 Socket connected
+channel-sidebar.tsx:67 Uncaught TypeError: Cannot read properties of undefined (reading 'toLowerCase')
+    at channel-sidebar.tsx:67:18
+    at Array.some (<anonymous>)
+    at channel-sidebar.tsx:66:30
+    at Array.filter (<anonymous>)
+    at ChannelSidebar (channel-sidebar.tsx:58:38)
+    at renderWithHooks (chunk-RPCDYKBN.js?v=6aef5939:11548:26)
+    at updateFunctionComponent (chunk-RPCDYKBN.js?v=6aef5939:14582:28)
+    at beginWork (chunk-RPCDYKBN.js?v=6aef5939:15924:22)
+    at HTMLUnknownElement.callCallback2 (chunk-RPCDYKBN.js?v=6aef5939:3674:22)
+    at Object.invokeGuardedCallbackDev (chunk-RPCDYKBN.js?v=6aef5939:3699:24)
+(anonymous) @ channel-sidebar.tsx:67
+(anonymous) @ channel-sidebar.tsx:66
+ChannelSidebar @ channel-sidebar.tsx:58
+renderWithHooks @ chunk-RPCDYKBN.js?v=6aef5939:11548
+updateFunctionComponent @ chunk-RPCDYKBN.js?v=6aef5939:14582
+beginWork @ chunk-RPCDYKBN.js?v=6aef5939:15924
+callCallback2 @ chunk-RPCDYKBN.js?v=6aef5939:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=6aef5939:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=6aef5939:3733
+beginWork$1 @ chunk-RPCDYKBN.js?v=6aef5939:19765
+performUnitOfWork @ chunk-RPCDYKBN.js?v=6aef5939:19198
+workLoopSync @ chunk-RPCDYKBN.js?v=6aef5939:19137
+renderRootSync @ chunk-RPCDYKBN.js?v=6aef5939:19116
+performSyncWorkOnRoot @ chunk-RPCDYKBN.js?v=6aef5939:18874
+flushSyncCallbacks @ chunk-RPCDYKBN.js?v=6aef5939:9119
+(anonymous) @ chunk-RPCDYKBN.js?v=6aef5939:18627
+setTimeout
+systemSetTimeoutZero @ @tanstack_react-query.js?v=6aef5939:103
+flush @ @tanstack_react-query.js?v=6aef5939:615
+batch @ @tanstack_react-query.js?v=6aef5939:633
+dispatch_fn @ @tanstack_react-query.js?v=6aef5939:1260
+setData @ @tanstack_react-query.js?v=6aef5939:935
+fetch @ @tanstack_react-query.js?v=6aef5939:1157
+await in fetch
+(anonymous) @ @tanstack_react-query.js?v=6aef5939:2899
+(anonymous) @ @tanstack_react-query.js?v=6aef5939:2898
+batch @ @tanstack_react-query.js?v=6aef5939:629
+refetchQueries @ @tanstack_react-query.js?v=6aef5939:2897
+(anonymous) @ @tanstack_react-query.js?v=6aef5939:2883
+batch @ @tanstack_react-query.js?v=6aef5939:629
+invalidateQueries @ @tanstack_react-query.js?v=6aef5939:2876
+onSuccess @ home.tsx:153
+execute @ @tanstack_react-query.js?v=6aef5939:2060
+await in execute
+mutate @ @tanstack_react-query.js?v=6aef5939:2390
+handleSelectUser @ home.tsx:234
+handleCreate @ new-chat-dialog.tsx:48
+callCallback2 @ chunk-RPCDYKBN.js?v=6aef5939:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=6aef5939:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=6aef5939:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=6aef5939:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=6aef5939:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=6aef5939:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=6aef5939:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=6aef5939:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=6aef5939:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=6aef5939:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=6aef5939:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=6aef5939:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=6aef5939:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=6aef5939:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=6aef5939:5449
+channel-sidebar.tsx:67 Uncaught TypeError: Cannot read properties of undefined (reading 'toLowerCase')
+    at channel-sidebar.tsx:67:18
+    at Array.some (<anonymous>)
+    at channel-sidebar.tsx:66:30
+    at Array.filter (<anonymous>)
+    at ChannelSidebar (channel-sidebar.tsx:58:38)
+    at renderWithHooks (chunk-RPCDYKBN.js?v=6aef5939:11548:26)
+    at updateFunctionComponent (chunk-RPCDYKBN.js?v=6aef5939:14582:28)
+    at beginWork (chunk-RPCDYKBN.js?v=6aef5939:15924:22)
+    at HTMLUnknownElement.callCallback2 (chunk-RPCDYKBN.js?v=6aef5939:3674:22)
+    at Object.invokeGuardedCallbackDev (chunk-RPCDYKBN.js?v=6aef5939:3699:24)
+(anonymous) @ channel-sidebar.tsx:67
+(anonymous) @ channel-sidebar.tsx:66
+ChannelSidebar @ channel-sidebar.tsx:58
+renderWithHooks @ chunk-RPCDYKBN.js?v=6aef5939:11548
+updateFunctionComponent @ chunk-RPCDYKBN.js?v=6aef5939:14582
+beginWork @ chunk-RPCDYKBN.js?v=6aef5939:15924
+callCallback2 @ chunk-RPCDYKBN.js?v=6aef5939:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=6aef5939:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=6aef5939:3733
+beginWork$1 @ chunk-RPCDYKBN.js?v=6aef5939:19765
+performUnitOfWork @ chunk-RPCDYKBN.js?v=6aef5939:19198
+workLoopSync @ chunk-RPCDYKBN.js?v=6aef5939:19137
+renderRootSync @ chunk-RPCDYKBN.js?v=6aef5939:19116
+recoverFromConcurrentError @ chunk-RPCDYKBN.js?v=6aef5939:18736
+performSyncWorkOnRoot @ chunk-RPCDYKBN.js?v=6aef5939:18879
+flushSyncCallbacks @ chunk-RPCDYKBN.js?v=6aef5939:9119
+(anonymous) @ chunk-RPCDYKBN.js?v=6aef5939:18627
+setTimeout
+systemSetTimeoutZero @ @tanstack_react-query.js?v=6aef5939:103
+flush @ @tanstack_react-query.js?v=6aef5939:615
+batch @ @tanstack_react-query.js?v=6aef5939:633
+dispatch_fn @ @tanstack_react-query.js?v=6aef5939:1260
+setData @ @tanstack_react-query.js?v=6aef5939:935
+fetch @ @tanstack_react-query.js?v=6aef5939:1157
+await in fetch
+(anonymous) @ @tanstack_react-query.js?v=6aef5939:2899
+(anonymous) @ @tanstack_react-query.js?v=6aef5939:2898
+batch @ @tanstack_react-query.js?v=6aef5939:629
+refetchQueries @ @tanstack_react-query.js?v=6aef5939:2897
+(anonymous) @ @tanstack_react-query.js?v=6aef5939:2883
+batch @ @tanstack_react-query.js?v=6aef5939:629
+invalidateQueries @ @tanstack_react-query.js?v=6aef5939:2876
+onSuccess @ home.tsx:153
+execute @ @tanstack_react-query.js?v=6aef5939:2060
+await in execute
+mutate @ @tanstack_react-query.js?v=6aef5939:2390
+handleSelectUser @ home.tsx:234
+handleCreate @ new-chat-dialog.tsx:48
+callCallback2 @ chunk-RPCDYKBN.js?v=6aef5939:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=6aef5939:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=6aef5939:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=6aef5939:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=6aef5939:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=6aef5939:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=6aef5939:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=6aef5939:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=6aef5939:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=6aef5939:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=6aef5939:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=6aef5939:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=6aef5939:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=6aef5939:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=6aef5939:5449
+home.tsx:153 The above error occurred in the <ChannelSidebar> component:
+
+    at ChannelSidebar (https://7a12763b-fdce-4c1e-a625-10d2184551e0-00-3ph89qga47n4p.picard.replit.dev/src/components/channel-sidebar.tsx:26:3)
+    at div
+    at div
+    at HomePage (https://7a12763b-fdce-4c1e-a625-10d2184551e0-00-3ph89qga47n4p.picard.replit.dev/src/pages/home.tsx:38:28)
+    at PrivateRoute (https://7a12763b-fdce-4c1e-a625-10d2184551e0-00-3ph89qga47n4p.picard.replit.dev/src/App.tsx?v=avaG04PYhEu0kEhdTlFRo:28:36)
+    at Route (https://7a12763b-fdce-4c1e-a625-10d2184551e0-00-3ph89qga47n4p.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=6aef5939:206:16)
+    at Switch (https://7a12763b-fdce-4c1e-a625-10d2184551e0-00-3ph89qga47n4p.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=6aef5939:262:17)
+    at Router
+    at Provider (https://7a12763b-fdce-4c1e-a625-10d2184551e0-00-3ph89qga47n4p.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-66JOO7XH.js?v=6aef5939:44:15)
+    at TooltipProvider (https://7a12763b-fdce-4c1e-a625-10d2184551e0-00-3ph89qga47n4p.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=6aef5939:2350:5)
+    at SocketProvider (https://7a12763b-fdce-4c1e-a625-10d2184551e0-00-3ph89qga47n4p.picard.replit.dev/src/contexts/SocketContext.tsx:23:34)
+    at AuthProvider (https://7a12763b-fdce-4c1e-a625-10d2184551e0-00-3ph89qga47n4p.picard.replit.dev/src/contexts/AuthContext.tsx:21:32)
+    at QueryClientProvider (https://7a12763b-fdce-4c1e-a625-10d2184551e0-00-3ph89qga47n4p.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@tanstack_react-query.js?v=6aef5939:3093:3)
+    at App
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+logCapturedError @ chunk-RPCDYKBN.js?v=6aef5939:14032
+update.callback @ chunk-RPCDYKBN.js?v=6aef5939:14052
+callCallback @ chunk-RPCDYKBN.js?v=6aef5939:11248
+commitUpdateQueue @ chunk-RPCDYKBN.js?v=6aef5939:11265
+commitLayoutEffectOnFiber @ chunk-RPCDYKBN.js?v=6aef5939:17093
+commitLayoutMountEffects_complete @ chunk-RPCDYKBN.js?v=6aef5939:17980
+commitLayoutEffects_begin @ chunk-RPCDYKBN.js?v=6aef5939:17969
+commitLayoutEffects @ chunk-RPCDYKBN.js?v=6aef5939:17920
+commitRootImpl @ chunk-RPCDYKBN.js?v=6aef5939:19353
+commitRoot @ chunk-RPCDYKBN.js?v=6aef5939:19277
+performSyncWorkOnRoot @ chunk-RPCDYKBN.js?v=6aef5939:18895
+flushSyncCallbacks @ chunk-RPCDYKBN.js?v=6aef5939:9119
+(anonymous) @ chunk-RPCDYKBN.js?v=6aef5939:18627
+setTimeout
+systemSetTimeoutZero @ @tanstack_react-query.js?v=6aef5939:103
+flush @ @tanstack_react-query.js?v=6aef5939:615
+batch @ @tanstack_react-query.js?v=6aef5939:633
+dispatch_fn @ @tanstack_react-query.js?v=6aef5939:1260
+setData @ @tanstack_react-query.js?v=6aef5939:935
+fetch @ @tanstack_react-query.js?v=6aef5939:1157
+await in fetch
+(anonymous) @ @tanstack_react-query.js?v=6aef5939:2899
+(anonymous) @ @tanstack_react-query.js?v=6aef5939:2898
+batch @ @tanstack_react-query.js?v=6aef5939:629
+refetchQueries @ @tanstack_react-query.js?v=6aef5939:2897
+(anonymous) @ @tanstack_react-query.js?v=6aef5939:2883
+batch @ @tanstack_react-query.js?v=6aef5939:629
+invalidateQueries @ @tanstack_react-query.js?v=6aef5939:2876
+onSuccess @ home.tsx:153
+execute @ @tanstack_react-query.js?v=6aef5939:2060
+await in execute
+mutate @ @tanstack_react-query.js?v=6aef5939:2390
+handleSelectUser @ home.tsx:234
+handleCreate @ new-chat-dialog.tsx:48
+callCallback2 @ chunk-RPCDYKBN.js?v=6aef5939:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=6aef5939:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=6aef5939:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=6aef5939:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=6aef5939:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=6aef5939:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=6aef5939:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=6aef5939:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=6aef5939:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=6aef5939:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=6aef5939:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=6aef5939:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=6aef5939:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=6aef5939:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=6aef5939:5449
+chunk-RPCDYKBN.js?v=6aef5939:9129 Uncaught TypeError: Cannot read properties of undefined (reading 'toLowerCase')
+    at channel-sidebar.tsx:67:18
+    at Array.some (<anonymous>)
+    at channel-sidebar.tsx:66:30
+    at Array.filter (<anonymous>)
+    at ChannelSidebar (channel-sidebar.tsx:58:38)
+    at renderWithHooks (chunk-RPCDYKBN.js?v=6aef5939:11548:26)
+    at updateFunctionComponent (chunk-RPCDYKBN.js?v=6aef5939:14582:28)
+    at beginWork (chunk-RPCDYKBN.js?v=6aef5939:15924:22)
+    at beginWork$1 (chunk-RPCDYKBN.js?v=6aef5939:19753:22)
+    at performUnitOfWork (chunk-RPCDYKBN.js?v=6aef5939:19198:20)
+(anonymous) @ channel-sidebar.tsx:67
+(anonymous) @ channel-sidebar.tsx:66
+ChannelSidebar @ channel-sidebar.tsx:58
+renderWithHooks @ chunk-RPCDYKBN.js?v=6aef5939:11548
+updateFunctionComponent @ chunk-RPCDYKBN.js?v=6aef5939:14582
+beginWork @ chunk-RPCDYKBN.js?v=6aef5939:15924
+beginWork$1 @ chunk-RPCDYKBN.js?v=6aef5939:19753
+performUnitOfWork @ chunk-RPCDYKBN.js?v=6aef5939:19198
+workLoopSync @ chunk-RPCDYKBN.js?v=6aef5939:19137
+renderRootSync @ chunk-RPCDYKBN.js?v=6aef5939:19116
+recoverFromConcurrentError @ chunk-RPCDYKBN.js?v=6aef5939:18736
+performSyncWorkOnRoot @ chunk-RPCDYKBN.js?v=6aef5939:18879
+flushSyncCallbacks @ chunk-RPCDYKBN.js?v=6aef5939:9119
+(anonymous) @ chunk-RPCDYKBN.js?v=6aef5939:18627
+setTimeout
+systemSetTimeoutZero @ @tanstack_react-query.js?v=6aef5939:103
+flush @ @tanstack_react-query.js?v=6aef5939:615
+batch @ @tanstack_react-query.js?v=6aef5939:633
+dispatch_fn @ @tanstack_react-query.js?v=6aef5939:1260
+setData @ @tanstack_react-query.js?v=6aef5939:935
+fetch @ @tanstack_react-query.js?v=6aef5939:1157
+await in fetch
+(anonymous) @ @tanstack_react-query.js?v=6aef5939:2899
+(anonymous) @ @tanstack_react-query.js?v=6aef5939:2898
+batch @ @tanstack_react-query.js?v=6aef5939:629
+refetchQueries @ @tanstack_react-query.js?v=6aef5939:2897
+(anonymous) @ @tanstack_react-query.js?v=6aef5939:2883
+batch @ @tanstack_react-query.js?v=6aef5939:629
+invalidateQueries @ @tanstack_react-query.js?v=6aef5939:2876
+onSuccess @ home.tsx:153
+execute @ @tanstack_react-query.js?v=6aef5939:2060
+await in execute
+mutate @ @tanstack_react-query.js?v=6aef5939:2390
+handleSelectUser @ home.tsx:234
+handleCreate @ new-chat-dialog.tsx:48
+callCallback2 @ chunk-RPCDYKBN.js?v=6aef5939:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=6aef5939:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=6aef5939:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=6aef5939:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=6aef5939:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=6aef5939:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=6aef5939:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=6aef5939:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=6aef5939:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=6aef5939:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=6aef5939:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=6aef5939:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=6aef5939:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=6aef5939:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=6aef5939:5449
+SocketContext.tsx:42 Socket disconnected

@@ -178,6 +178,8 @@ Following Microsoft Fluent Design principles with:
 ## Recent Changes
 
 **November 24, 2025 (Latest)**
+- Fixed ChannelSidebar crash when filtering DMs: Added defensive check for undefined usernames before .toLowerCase() call
+- Users with missing username fields now use email local part as fallback display name during search
 - Fixed login endpoint error (500 - "Illegal arguments: string, undefined"): Added defensive check to verify password exists in database before bcrypt comparison
 - Users with missing password fields in database now get proper "Invalid credentials" message instead of server error
 - Fixed chat navigation mutation: Corrected TanStack Query v5 mutation pattern - data flows from mutationFn directly to mutateAsync(), not from onSuccess callback
