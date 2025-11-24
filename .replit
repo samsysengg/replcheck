@@ -15,7 +15,7 @@ localPort = 5000
 externalPort = 80
 
 [[ports]]
-localPort = 35735
+localPort = 44105
 externalPort = 3000
 
 [env]
@@ -47,3 +47,6 @@ waitForPort = 5000
 [userenv.shared]
 MONGO_URI = "mongodb+srv://wyre_db_user:Alpha12345@wyre.qcipzpf.mongodb.net/wyre_chat?retryWrites=true&w=majority"
 JWT_SECRET = "your-jwt-secret-key-change-in-production-please-use-strong-random-value"
+
+[agent]
+expertMode = true

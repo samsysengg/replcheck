@@ -3,6 +3,7 @@ import { createServer, type Server } from "http";
 import { Server as SocketIOServer } from "socket.io";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import mongoose from "mongoose";
 import { body, validationResult } from "express-validator";
 import rateLimit from "express-rate-limit";
 import { authenticate, AuthRequest } from "./middleware/auth";
@@ -65,6 +66,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (err) {
       next(new Error("Authentication error"));
     }
+  });
+
+  app.get("/api/health", (req, res) => {
+    res.json({ status: "ok", timestamp: new Date().toISOString() });
   });
 
   app.post(
@@ -158,6 +163,86 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
     }
   );
+
+  app.post("/api/auth/logout", authenticate, async (req: AuthRequest, res) => {
+    try {
+      await UserModel.findByIdAndUpdate(req.userId, { status: "offline" });
+      res.json({ message: "Logged out successfully" });
+    } catch (error) {
+      console.error("Logout error:", error);
+      res.status(500).json({ message: "Server error during logout" });
+    }
+  });
+
+  app.get("/api/search", authenticate, async (req: AuthRequest, res) => {
+    try {
+      const { q, type = "all" } = req.query;
+      const query = q as string;
+
+      if (!query || query.length < 2) {
+        return res.json({ users: [], channels: [], messages: [] });
+      }
+
+      const searchRegex = new RegExp(query, "i");
+      const results: any = {};
+
+      if (type === "all" || type === "users") {
+        const users = await UserModel.find({
+          $and: [
+            { _id: { $ne: req.userId } },
+            {
+              $or: [
+                { username: searchRegex },
+                { email: searchRegex },
+              ],
+            },
+          ],
+        }).limit(10);
+
+        results.users = users.map((u) => ({
+          _id: u._id.toString(),
+          username: u.username,
+          email: u.email,
+          avatar: u.avatar,
+          status: u.status,
+        }));
+      }
+
+      if (type === "all" || type === "channels") {
+        const channels = await ChannelModel.find({
+          name: searchRegex,
+        }).limit(10);
+
+        results.channels = channels.map((c) => ({
+          _id: c._id.toString(),
+          name: c.name,
+          description: c.description,
+          workspaceId: c.workspaceId.toString(),
+        }));
+      }
+
+      if (type === "all" || type === "messages") {
+        const messages = await MessageModel.find({
+          content: searchRegex,
+        })
+          .sort({ createdAt: -1 })
+          .limit(20);
+
+        results.messages = messages.map((m) => ({
+          _id: m._id.toString(),
+          content: m.content,
+          authorId: m.authorId.toString(),
+          channelId: m.channelId?.toString(),
+          createdAt: m.createdAt,
+        }));
+      }
+
+      res.json(results);
+    } catch (error) {
+      console.error("Search error:", error);
+      res.status(500).json({ message: "Server error" });
+    }
+  });
 
   app.get("/api/workspaces", authenticate, async (req: AuthRequest, res) => {
     try {
@@ -333,33 +418,186 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const dmsWithUsers = await Promise.all(
         dms.map(async (dm) => {
-          const otherUserId = dm.participantIds.find((id) => id.toString() !== req.userId);
-          const otherUser = await UserModel.findById(otherUserId);
+          const participants = await UserModel.find({
+            _id: { $in: dm.participantIds },
+          });
+
+          const participantsData = participants.map((p) => ({
+            _id: p._id.toString(),
+            username: p.username,
+            email: p.email,
+            avatar: p.avatar,
+            status: p.status,
+          }));
 
           return {
-            dm: {
-              _id: dm._id.toString(),
-              participantIds: dm.participantIds.map((id) => id.toString()),
-              workspaceId: dm.workspaceId.toString(),
-              createdAt: dm.createdAt,
-            },
-            otherUser: otherUser
-              ? {
-                  _id: otherUser._id.toString(),
-                  username: otherUser.username,
-                  email: otherUser.email,
-                  avatar: otherUser.avatar,
-                  status: otherUser.status,
-                  createdAt: otherUser.createdAt,
-                }
-              : null,
+            _id: dm._id.toString(),
+            participantIds: dm.participantIds.map((id) => id.toString()),
+            participants: participantsData,
+            workspaceId: dm.workspaceId.toString(),
+            name: dm.name,
+            isGroupChat: dm.isGroupChat,
+            createdAt: dm.createdAt,
           };
         })
       );
 
-      res.json(dmsWithUsers.filter((dm) => dm.otherUser !== null));
+      res.json(dmsWithUsers);
     } catch (error) {
       console.error("Get DMs error:", error);
+      res.status(500).json({ message: "Server error" });
+    }
+  });
+
+  app.post("/api/direct-messages", authenticate, async (req: AuthRequest, res) => {
+    try {
+      const { workspaceId, userIds, name } = req.body;
+
+      if (!userIds || !Array.isArray(userIds) || userIds.length === 0) {
+        return res.status(400).json({ message: "At least one user is required" });
+      }
+
+      const allParticipantIds = Array.from(new Set([req.userId, ...userIds]));
+      const isGroupChat = allParticipantIds.length > 2;
+
+      const existingDM = await DirectMessageModel.findOne({
+        workspaceId,
+        participantIds: { $all: allParticipantIds, $size: allParticipantIds.length },
+      });
+
+      if (existingDM && !isGroupChat) {
+        const participants = await UserModel.find({
+          _id: { $in: existingDM.participantIds },
+        });
+
+        return res.json({
+          _id: existingDM._id.toString(),
+          participantIds: existingDM.participantIds.map((id) => id.toString()),
+          participants: participants.map((p) => ({
+            _id: p._id.toString(),
+            username: p.username,
+            email: p.email,
+            avatar: p.avatar,
+            status: p.status,
+          })),
+          workspaceId: existingDM.workspaceId.toString(),
+          name: existingDM.name,
+          isGroupChat: existingDM.isGroupChat,
+          createdAt: existingDM.createdAt,
+        });
+      }
+
+      const dm = await DirectMessageModel.create({
+        workspaceId,
+        participantIds: allParticipantIds,
+        name: isGroupChat ? name : undefined,
+        isGroupChat,
+      });
+
+      const participants = await UserModel.find({
+        _id: { $in: dm.participantIds },
+      });
+
+      res.json({
+        _id: dm._id.toString(),
+        participantIds: dm.participantIds.map((id) => id.toString()),
+        participants: participants.map((p) => ({
+          _id: p._id.toString(),
+          username: p.username,
+          email: p.email,
+          avatar: p.avatar,
+          status: p.status,
+        })),
+        workspaceId: dm.workspaceId.toString(),
+        name: dm.name,
+        isGroupChat: dm.isGroupChat,
+        createdAt: dm.createdAt,
+      });
+    } catch (error) {
+      console.error("Create DM error:", error);
+      res.status(500).json({ message: "Server error" });
+    }
+  });
+
+  app.post("/api/direct-messages/:id/participants", authenticate, async (req: AuthRequest, res) => {
+    try {
+      const { id } = req.params;
+      const { userIds, name } = req.body;
+
+      const dm = await DirectMessageModel.findById(id);
+      if (!dm) {
+        return res.status(404).json({ message: "Chat not found" });
+      }
+
+      if (!dm.participantIds.some((pid) => pid.toString() === req.userId)) {
+        return res.status(403).json({ message: "Not authorized" });
+      }
+
+      const newParticipantIds = Array.from(new Set([...dm.participantIds.map((id) => id.toString()), ...userIds]));
+      const isGroupChat = newParticipantIds.length > 2;
+
+      dm.participantIds = newParticipantIds.map((id) => new mongoose.Types.ObjectId(id));
+      dm.isGroupChat = isGroupChat;
+      if (name && isGroupChat) {
+        dm.name = name;
+      }
+
+      await dm.save();
+
+      const participants = await UserModel.find({
+        _id: { $in: dm.participantIds },
+      });
+
+      res.json({
+        _id: dm._id.toString(),
+        participantIds: dm.participantIds.map((id) => id.toString()),
+        participants: participants.map((p) => ({
+          _id: p._id.toString(),
+          username: p.username,
+          email: p.email,
+          avatar: p.avatar,
+          status: p.status,
+        })),
+        workspaceId: dm.workspaceId.toString(),
+        name: dm.name,
+        isGroupChat: dm.isGroupChat,
+        createdAt: dm.createdAt,
+      });
+    } catch (error) {
+      console.error("Add participants error:", error);
+      res.status(500).json({ message: "Server error" });
+    }
+  });
+
+  app.get("/api/direct-messages/:id/messages", authenticate, async (req: AuthRequest, res) => {
+    try {
+      const { id } = req.params;
+
+      const dm = await DirectMessageModel.findById(id);
+      if (!dm) {
+        return res.status(404).json({ message: "Chat not found" });
+      }
+
+      if (!dm.participantIds.some((pid) => pid.toString() === req.userId)) {
+        return res.status(403).json({ message: "Not authorized" });
+      }
+
+      const messages = await MessageModel.find({ directMessageId: id })
+        .sort({ createdAt: 1 })
+        .limit(100);
+
+      const messagesResponse = messages.map((m) => ({
+        _id: m._id.toString(),
+        content: m.content,
+        authorId: m.authorId.toString(),
+        directMessageId: m.directMessageId?.toString(),
+        createdAt: m.createdAt,
+        updatedAt: m.updatedAt,
+      }));
+
+      res.json(messagesResponse);
+    } catch (error) {
+      console.error("Get DM messages error:", error);
       res.status(500).json({ message: "Server error" });
     }
   });

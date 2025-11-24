@@ -6,15 +6,19 @@ import { MessageView } from "@/components/message-view";
 import { VideoCall } from "@/components/video-call";
 import { CreateWorkspaceDialog } from "@/components/create-workspace-dialog";
 import { CreateChannelDialog } from "@/components/create-channel-dialog";
+import { SearchDialog } from "@/components/search-dialog";
+import { AddParticipantsDialog } from "@/components/add-participants-dialog";
+import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSocket } from "@/contexts/SocketContext";
 import { useWebRTC } from "@/hooks/use-webrtc";
 import { useToast } from "@/hooks/use-toast";
 import { queryClient, apiRequest } from "@/lib/queryClient";
 import { Workspace, Channel, Message, DirectMessage, User } from "@shared/schema";
+import { Search, LogOut } from "lucide-react";
 
 export default function HomePage() {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const { socket } = useSocket();
   const { startCall, endCall, localStream, remoteStreams } = useWebRTC();
   const { toast } = useToast();
@@ -23,6 +27,8 @@ export default function HomePage() {
   const [activeDmId, setActiveDmId] = useState<string | null>(null);
   const [createWorkspaceOpen, setCreateWorkspaceOpen] = useState(false);
   const [createChannelOpen, setCreateChannelOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [addParticipantsOpen, setAddParticipantsOpen] = useState(false);
   const [inCall, setInCall] = useState(false);
 
   const { data: workspaces = [] } = useQuery<Workspace[]>({
@@ -39,9 +45,20 @@ export default function HomePage() {
     enabled: !!activeChannelId && !activeDmId,
   });
 
-  const { data: directMessages = [] } = useQuery<{ dm: DirectMessage; otherUser: User }[]>({
+  interface ExtendedDirectMessage extends DirectMessage {
+    participants?: User[];
+    name?: string;
+    isGroupChat: boolean;
+  }
+
+  const { data: directMessages = [] } = useQuery<ExtendedDirectMessage[]>({
     queryKey: ["/api/direct-messages", activeWorkspaceId],
     enabled: !!activeWorkspaceId,
+  });
+
+  const { data: dmMessages = [] } = useQuery<Message[]>({
+    queryKey: ["/api/direct-messages", activeDmId, "messages"],
+    enabled: !!activeDmId,
   });
 
   const createWorkspaceMutation = useMutation({
@@ -76,9 +93,50 @@ export default function HomePage() {
         content,
         authorId: user?._id,
         channelId: activeChannelId,
+        directMessageId: activeDmId,
       }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/messages", activeChannelId] });
+      if (activeChannelId) {
+        queryClient.invalidateQueries({ queryKey: ["/api/messages", activeChannelId] });
+      }
+      if (activeDmId) {
+        queryClient.invalidateQueries({ queryKey: ["/api/direct-messages", activeDmId, "messages"] });
+      }
+    },
+  });
+
+  const createDmMutation = useMutation({
+    mutationFn: (data: { workspaceId: string; userIds: string[]; name?: string }) =>
+      apiRequest("POST", "/api/direct-messages", data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/direct-messages", activeWorkspaceId] });
+      toast({ title: "Success", description: "Chat created successfully" });
+    },
+    onError: () => {
+      toast({ title: "Error", description: "Failed to create chat", variant: "destructive" });
+    },
+  });
+
+  const addParticipantsMutation = useMutation({
+    mutationFn: (data: { dmId: string; userIds: string[]; name?: string }) =>
+      apiRequest("POST", `/api/direct-messages/${data.dmId}/participants`, {
+        userIds: data.userIds,
+        name: data.name,
+      }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/direct-messages", activeWorkspaceId] });
+      setAddParticipantsOpen(false);
+      toast({ title: "Success", description: "People added successfully" });
+    },
+    onError: () => {
+      toast({ title: "Error", description: "Failed to add people", variant: "destructive" });
+    },
+  });
+
+  const logoutMutation = useMutation({
+    mutationFn: () => apiRequest("POST", "/api/auth/logout", {}),
+    onSuccess: () => {
+      logout();
     },
   });
 
@@ -115,11 +173,47 @@ export default function HomePage() {
 
   const activeWorkspace = workspaces.find((w) => w._id === activeWorkspaceId) || null;
   const activeChannel = channels.find((c) => c._id === activeChannelId) || null;
+  const activeDm = directMessages.find((dm) => dm._id === activeDmId) || null;
 
   const usersMap = new Map<string, User>();
   if (user) {
     usersMap.set(user._id, user);
   }
+  directMessages.forEach((dm) => {
+    if (dm.participants && Array.isArray(dm.participants)) {
+      dm.participants.forEach((participant) => {
+        usersMap.set(participant._id, participant);
+      });
+    }
+  });
+
+  const handleSelectUser = async (userId: string) => {
+    if (!activeWorkspaceId) return;
+    
+    const result = await createDmMutation.mutateAsync({
+      workspaceId: activeWorkspaceId,
+      userIds: [userId],
+    });
+    
+    if (result) {
+      setActiveDmId(result._id);
+      setActiveChannelId(null);
+    }
+  };
+
+  const handleAddParticipants = (userIds: string[], groupName?: string) => {
+    if (!activeDmId) return;
+    
+    addParticipantsMutation.mutate({
+      dmId: activeDmId,
+      userIds,
+      name: groupName,
+    });
+  };
+
+  const handleLogout = () => {
+    logoutMutation.mutate();
+  };
 
   const handleStartVideoCall = async () => {
     try {
@@ -156,51 +250,93 @@ export default function HomePage() {
   }
 
   return (
-    <div className="flex h-screen overflow-hidden">
-      <WorkspaceSidebar
-        workspaces={workspaces}
-        activeWorkspaceId={activeWorkspaceId}
-        onWorkspaceSelect={setActiveWorkspaceId}
-        onCreateWorkspace={() => setCreateWorkspaceOpen(true)}
-      />
-      <ChannelSidebar
-        workspace={activeWorkspace}
-        channels={channels}
-        directMessages={directMessages}
-        activeChannelId={activeChannelId}
-        activeDmId={activeDmId}
-        onChannelSelect={(id) => {
-          setActiveChannelId(id);
-          setActiveDmId(null);
-        }}
-        onDmSelect={(id) => {
-          setActiveDmId(id);
-          setActiveChannelId(null);
-        }}
-        onCreateChannel={() => setCreateChannelOpen(true)}
-        currentUser={user}
-      />
-      <MessageView
-        channel={activeChannel}
-        messages={messages}
-        users={usersMap}
-        currentUser={user}
-        onSendMessage={(content) => sendMessageMutation.mutate(content)}
-        onStartVideoCall={handleStartVideoCall}
-        onStartVoiceCall={handleStartVideoCall}
-      />
-      <CreateWorkspaceDialog
-        open={createWorkspaceOpen}
-        onOpenChange={setCreateWorkspaceOpen}
-        onSubmit={(data) => createWorkspaceMutation.mutate(data)}
-        isLoading={createWorkspaceMutation.isPending}
-      />
-      <CreateChannelDialog
-        open={createChannelOpen}
-        onOpenChange={setCreateChannelOpen}
-        onSubmit={(data) => createChannelMutation.mutate(data)}
-        isLoading={createChannelMutation.isPending}
-      />
+    <div className="flex h-screen overflow-hidden flex-col">
+      <header className="flex items-center justify-between px-4 py-2 border-b bg-card">
+        <h1 className="text-lg font-semibold">TeamTalk</h1>
+        <div className="flex items-center gap-2">
+          <Button
+            size="icon"
+            variant="ghost"
+            onClick={() => setSearchOpen(true)}
+            data-testid="button-search"
+          >
+            <Search className="h-5 w-5" />
+          </Button>
+          <Button
+            size="icon"
+            variant="ghost"
+            onClick={handleLogout}
+            data-testid="button-logout"
+          >
+            <LogOut className="h-5 w-5" />
+          </Button>
+        </div>
+      </header>
+      <div className="flex flex-1 overflow-hidden">
+        <WorkspaceSidebar
+          workspaces={workspaces}
+          activeWorkspaceId={activeWorkspaceId}
+          onWorkspaceSelect={setActiveWorkspaceId}
+          onCreateWorkspace={() => setCreateWorkspaceOpen(true)}
+        />
+        <ChannelSidebar
+          workspace={activeWorkspace}
+          channels={channels}
+          directMessages={directMessages}
+          activeChannelId={activeChannelId}
+          activeDmId={activeDmId}
+          onChannelSelect={(id) => {
+            setActiveChannelId(id);
+            setActiveDmId(null);
+          }}
+          onDmSelect={(id) => {
+            setActiveDmId(id);
+            setActiveChannelId(null);
+          }}
+          onCreateChannel={() => setCreateChannelOpen(true)}
+          currentUser={user}
+        />
+        <MessageView
+          channel={activeChannel}
+          directMessage={activeDm}
+          messages={activeDm ? dmMessages : messages}
+          users={usersMap}
+          currentUser={user}
+          onSendMessage={(content) => sendMessageMutation.mutate(content)}
+          onStartVideoCall={handleStartVideoCall}
+          onStartVoiceCall={handleStartVideoCall}
+          onAddParticipants={activeDm ? () => setAddParticipantsOpen(true) : undefined}
+        />
+        <CreateWorkspaceDialog
+          open={createWorkspaceOpen}
+          onOpenChange={setCreateWorkspaceOpen}
+          onSubmit={(data) => createWorkspaceMutation.mutate(data)}
+          isLoading={createWorkspaceMutation.isPending}
+        />
+        <CreateChannelDialog
+          open={createChannelOpen}
+          onOpenChange={setCreateChannelOpen}
+          onSubmit={(data) => createChannelMutation.mutate(data)}
+          isLoading={createChannelMutation.isPending}
+        />
+        <SearchDialog
+          open={searchOpen}
+          onOpenChange={setSearchOpen}
+          onSelectUser={handleSelectUser}
+          onSelectChannel={(channelId) => {
+            setActiveChannelId(channelId);
+            setActiveDmId(null);
+          }}
+        />
+        <AddParticipantsDialog
+          open={addParticipantsOpen}
+          onOpenChange={setAddParticipantsOpen}
+          onSubmit={handleAddParticipants}
+          isLoading={addParticipantsMutation.isPending}
+          currentParticipantIds={activeDm?.participantIds || []}
+          isGroupChat={activeDm?.isGroupChat || false}
+        />
+      </div>
     </div>
   );
 }

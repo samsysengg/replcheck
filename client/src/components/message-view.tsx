@@ -1,30 +1,40 @@
 import { useState, useRef, useEffect } from "react";
-import { Hash, Lock, Video, Phone, Users, MoreVertical, Smile, Paperclip, Send } from "lucide-react";
+import { Hash, Lock, Video, Phone, Users, MoreVertical, Smile, Paperclip, Send, UserPlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Channel, Message, User } from "@shared/schema";
+import { Channel, Message, User, DirectMessage } from "@shared/schema";
 import { format } from "date-fns";
 
+interface ExtendedDirectMessage extends DirectMessage {
+  participants?: User[];
+  name?: string;
+  isGroupChat: boolean;
+}
+
 interface MessageViewProps {
-  channel: Channel | null;
+  channel?: Channel | null;
+  directMessage?: ExtendedDirectMessage | null;
   messages: Message[];
   users: Map<string, User>;
   currentUser: User | null;
   onSendMessage: (content: string) => void;
   onStartVideoCall: () => void;
   onStartVoiceCall: () => void;
+  onAddParticipants?: () => void;
 }
 
 export function MessageView({
   channel,
+  directMessage,
   messages,
   users,
   currentUser,
   onSendMessage,
   onStartVideoCall,
   onStartVoiceCall,
+  onAddParticipants,
 }: MessageViewProps) {
   const [messageInput, setMessageInput] = useState("");
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -49,35 +59,69 @@ export function MessageView({
     }
   };
 
-  if (!channel || !currentUser) {
+  if ((!channel && !directMessage) || !currentUser) {
     return (
       <div className="flex items-center justify-center h-screen flex-1 bg-background">
         <div className="text-center space-y-3">
           <div className="w-16 h-16 mx-auto rounded-full bg-muted flex items-center justify-center">
             <Hash className="w-8 h-8 text-muted-foreground" />
           </div>
-          <h3 className="text-lg font-semibold text-foreground">No channel selected</h3>
+          <h3 className="text-lg font-semibold text-foreground">No conversation selected</h3>
           <p className="text-sm text-muted-foreground max-w-sm">
-            Select a channel from the sidebar to start chatting with your team
+            Select a channel or chat from the sidebar to start messaging
           </p>
         </div>
       </div>
     );
   }
 
+  const getDmDisplayName = () => {
+    if (!directMessage) return "";
+    
+    if (directMessage.isGroupChat && directMessage.name) {
+      return directMessage.name;
+    }
+    
+    if (!directMessage.participants || directMessage.participants.length === 0) {
+      return "Direct Message";
+    }
+    
+    const otherParticipants = directMessage.participants.filter(
+      (p: User) => p._id !== currentUser._id
+    );
+    
+    if (otherParticipants.length === 0) return "Direct Message";
+    if (otherParticipants.length === 1) return otherParticipants[0].username;
+    
+    return otherParticipants.map((p: User) => p.username).join(", ");
+  };
+
   return (
     <div className="flex flex-col h-screen flex-1 bg-background">
       <div className="flex items-center justify-between h-16 px-4 border-b border-border">
         <div className="flex items-center gap-2">
-          {channel.isPrivate ? (
+          {directMessage ? (
+            directMessage.isGroupChat ? (
+              <Users className="w-5 h-5 text-foreground/70" />
+            ) : (
+              <div className="w-5 h-5 text-foreground/70" />
+            )
+          ) : channel?.isPrivate ? (
             <Lock className="w-5 h-5 text-foreground/70" />
           ) : (
             <Hash className="w-5 h-5 text-foreground/70" />
           )}
           <div>
-            <h2 className="font-semibold text-foreground">{channel.name}</h2>
-            {channel.description && (
+            <h2 className="font-semibold text-foreground" data-testid="text-chat-title">
+              {directMessage ? getDmDisplayName() : channel?.name}
+            </h2>
+            {channel?.description && (
               <p className="text-xs text-muted-foreground">{channel.description}</p>
+            )}
+            {directMessage && directMessage.isGroupChat && (
+              <p className="text-xs text-muted-foreground">
+                {directMessage.participants.length} members
+              </p>
             )}
           </div>
         </div>
@@ -98,12 +142,26 @@ export function MessageView({
           >
             <Video className="w-5 h-5" />
           </Button>
-          <Button size="icon" variant="ghost" data-testid="button-channel-members">
-            <Users className="w-5 h-5" />
-          </Button>
-          <Button size="icon" variant="ghost" data-testid="button-channel-settings">
-            <MoreVertical className="w-5 h-5" />
-          </Button>
+          {directMessage && onAddParticipants && (
+            <Button
+              size="icon"
+              variant="ghost"
+              onClick={onAddParticipants}
+              data-testid="button-add-participants"
+            >
+              <UserPlus className="w-5 h-5" />
+            </Button>
+          )}
+          {channel && (
+            <>
+              <Button size="icon" variant="ghost" data-testid="button-channel-members">
+                <Users className="w-5 h-5" />
+              </Button>
+              <Button size="icon" variant="ghost" data-testid="button-channel-settings">
+                <MoreVertical className="w-5 h-5" />
+              </Button>
+            </>
+          )}
         </div>
       </div>
 
@@ -168,7 +226,11 @@ export function MessageView({
               value={messageInput}
               onChange={(e) => setMessageInput(e.target.value)}
               onKeyDown={handleKeyPress}
-              placeholder={`Message #${channel.name}`}
+              placeholder={
+                directMessage
+                  ? `Message ${getDmDisplayName()}`
+                  : `Message #${channel?.name || ""}`
+              }
               className="border-0 focus-visible:ring-0 p-0 text-sm bg-transparent"
               data-testid="input-message"
             />

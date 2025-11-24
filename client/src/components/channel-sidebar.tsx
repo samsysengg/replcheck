@@ -8,10 +8,16 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Channel, DirectMessage, User, Workspace } from "@shared/schema";
 
+interface ExtendedDirectMessage extends DirectMessage {
+  participants?: User[];
+  name?: string;
+  isGroupChat: boolean;
+}
+
 interface ChannelSidebarProps {
   workspace: Workspace | null;
   channels: Channel[];
-  directMessages: { dm: DirectMessage; otherUser: User }[];
+  directMessages: ExtendedDirectMessage[];
   activeChannelId: string | null;
   activeDmId: string | null;
   onChannelSelect: (channelId: string) => void;
@@ -45,9 +51,18 @@ export function ChannelSidebar({
     channel.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const filteredDms = directMessages.filter((dm) =>
-    dm.otherUser.username.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredDms = directMessages.filter((dm) => {
+    if (dm.isGroupChat && dm.name) {
+      return dm.name.toLowerCase().includes(searchQuery.toLowerCase());
+    }
+    if (!dm.participants || dm.participants.length === 0) {
+      return false;
+    }
+    const otherParticipants = dm.participants.filter((p) => p._id !== currentUser._id);
+    return otherParticipants.some((p) =>
+      p.username.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  });
 
   return (
     <div className="flex flex-col h-screen w-72 bg-sidebar border-r border-sidebar-border">
@@ -127,39 +142,59 @@ export function ChannelSidebar({
               </CollapsibleTrigger>
             </div>
             <CollapsibleContent className="space-y-0.5 mt-1">
-              {filteredDms.map(({ dm, otherUser }) => (
-                <button
-                  key={dm._id}
-                  onClick={() => onDmSelect(dm._id)}
-                  className={`w-full flex items-center gap-2 px-2 py-1.5 rounded-md text-sm hover-elevate ${
-                    activeDmId === dm._id
-                      ? "bg-sidebar-accent text-sidebar-accent-foreground"
-                      : "text-sidebar-foreground/80"
-                  }`}
-                  data-testid={`button-dm-${dm._id}`}
-                >
-                  <div className="relative">
-                    <Avatar className="w-6 h-6">
-                      <AvatarImage src={otherUser.avatar} />
-                      <AvatarFallback className="text-xs">
-                        {otherUser.username.substring(0, 2).toUpperCase()}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div
-                      className={`absolute bottom-0 right-0 w-2 h-2 rounded-full border border-sidebar ${
-                        otherUser.status === "online"
-                          ? "bg-status-online"
-                          : otherUser.status === "away"
-                          ? "bg-status-away"
-                          : otherUser.status === "busy"
-                          ? "bg-status-busy"
-                          : "bg-status-offline"
-                      }`}
-                    />
-                  </div>
-                  <span className="truncate flex-1 text-left">{otherUser.username}</span>
-                </button>
-              ))}
+              {filteredDms.map((dm) => {
+                const participants = dm.participants || [];
+                const otherParticipants = participants.filter((p) => p._id !== currentUser._id);
+                const displayName = dm.isGroupChat && dm.name
+                  ? dm.name
+                  : otherParticipants.length > 0
+                  ? otherParticipants.map((p) => p.username).join(", ")
+                  : "Direct Message";
+                
+                const avatarUser = otherParticipants.length > 0 ? otherParticipants[0] : null;
+
+                return (
+                  <button
+                    key={dm._id}
+                    onClick={() => onDmSelect(dm._id)}
+                    className={`w-full flex items-center gap-2 px-2 py-1.5 rounded-md text-sm hover-elevate ${
+                      activeDmId === dm._id
+                        ? "bg-sidebar-accent text-sidebar-accent-foreground"
+                        : "text-sidebar-foreground/80"
+                    }`}
+                    data-testid={`button-dm-${dm._id}`}
+                  >
+                    {dm.isGroupChat ? (
+                      <div className="w-6 h-6 rounded-full bg-muted flex items-center justify-center flex-shrink-0">
+                        <Users className="w-3 h-3" />
+                      </div>
+                    ) : avatarUser ? (
+                      <div className="relative">
+                        <Avatar className="w-6 h-6">
+                          <AvatarImage src={avatarUser.avatar} />
+                          <AvatarFallback className="text-xs">
+                            {avatarUser.username.substring(0, 2).toUpperCase()}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div
+                          className={`absolute bottom-0 right-0 w-2 h-2 rounded-full border border-sidebar ${
+                            avatarUser.status === "online"
+                              ? "bg-status-online"
+                              : avatarUser.status === "away"
+                              ? "bg-status-away"
+                              : avatarUser.status === "busy"
+                              ? "bg-status-busy"
+                              : "bg-status-offline"
+                          }`}
+                        />
+                      </div>
+                    ) : (
+                      <div className="w-6 h-6 rounded-full bg-muted" />
+                    )}
+                    <span className="truncate flex-1 text-left">{displayName}</span>
+                  </button>
+                );
+              })}
               {filteredDms.length === 0 && (
                 <p className="text-xs text-muted-foreground px-2 py-2">No direct messages</p>
               )}

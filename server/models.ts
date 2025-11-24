@@ -83,12 +83,16 @@ export const MessageModel = mongoose.model<IMessage>("Message", messageSchema);
 export interface IDirectMessage extends Document {
   participantIds: mongoose.Types.ObjectId[];
   workspaceId: mongoose.Types.ObjectId;
+  name?: string;
+  isGroupChat: boolean;
   createdAt: Date;
 }
 
 const directMessageSchema = new Schema<IDirectMessage>({
   participantIds: [{ type: Schema.Types.ObjectId, ref: "User", required: true }],
   workspaceId: { type: Schema.Types.ObjectId, ref: "Workspace", required: true },
+  name: { type: String },
+  isGroupChat: { type: Boolean, default: false },
   createdAt: { type: Date, default: Date.now },
 });
 
