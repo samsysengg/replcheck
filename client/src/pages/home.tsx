@@ -149,9 +149,10 @@ export default function HomePage() {
   const createDmMutation = useMutation({
     mutationFn: (data: { workspaceId: string; userIds: string[]; name?: string }) =>
       apiRequest("POST", "/api/direct-messages", data),
-    onSuccess: () => {
+    onSuccess: (result) => {
       queryClient.invalidateQueries({ queryKey: ["/api/direct-messages", activeWorkspaceId] });
       toast({ title: "Success", description: "Chat created successfully" });
+      return result;
     },
     onError: () => {
       toast({ title: "Error", description: "Failed to create chat", variant: "destructive" });

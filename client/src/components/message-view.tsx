@@ -61,7 +61,7 @@ export function MessageView({
 
   if ((!channel && !directMessage) || !currentUser) {
     return (
-      <div className="flex items-center justify-center h-screen flex-1 bg-background">
+      <div className="flex items-center justify-center flex-1 bg-background w-full">
         <div className="text-center space-y-3">
           <div className="w-16 h-16 mx-auto rounded-full bg-muted flex items-center justify-center">
             <Hash className="w-8 h-8 text-muted-foreground" />
@@ -97,8 +97,8 @@ export function MessageView({
   };
 
   return (
-    <div className="flex flex-col h-screen flex-1 bg-background">
-      <div className="flex items-center justify-between h-16 px-4 border-b border-border">
+    <div className="flex flex-col flex-1 bg-background w-full h-full overflow-hidden">
+      <div className="flex items-center justify-between h-16 px-4 border-b border-border flex-shrink-0">
         <div className="flex items-center gap-2">
           {directMessage ? (
             directMessage.isGroupChat ? (
@@ -165,8 +165,8 @@ export function MessageView({
         </div>
       </div>
 
-      <ScrollArea className="flex-1 px-4" ref={scrollRef}>
-        <div className="py-4 space-y-4">
+      <ScrollArea className="flex-1 w-full overflow-hidden" ref={scrollRef}>
+        <div className="px-4 py-4 space-y-4">
           {messages.length === 0 ? (
             <div className="text-center py-12">
               <p className="text-sm text-muted-foreground">
@@ -219,8 +219,8 @@ export function MessageView({
         </div>
       </ScrollArea>
 
-      <div className="p-4 border-t border-border">
-        <div className="flex items-end gap-2">
+      <div className="p-4 border-t border-border flex-shrink-0">
+        <div className="flex items-end gap-2 w-full">
           <div className="flex-1 bg-card rounded-lg border border-card-border p-3">
             <Input
               value={messageInput}

@@ -178,6 +178,12 @@ Following Microsoft Fluent Design principles with:
 ## Recent Changes
 
 **November 24, 2025 (Latest)**
+- Fixed "Start Chat" navigation: createDmMutation now properly returns result data for immediate UI update
+- Fixed UI layout to fill entire browser window: removed h-screen from nested MessageView, now uses flex-1 for proper responsiveness
+- Added flex-shrink-0 to MessageView header and input footer to prevent height collapse
+- Made MessageView fully responsive with proper overflow handling (h-full, w-full, overflow-hidden)
+- Fixed ScrollArea width to fill container (w-full) instead of adding px padding which could cause overflow
+- UI now properly fits within window height and width, fully responsive to device size
 - Fixed SearchDialog query parameter passing - now properly uses URLSearchParams instead of stringifying objects in URL path
 - The global search (Cmd+K / Ctrl+K) now correctly finds all users including alphaideaspace when searching for partial usernames
 - Fixed `/api/users` endpoint to show user emails as fallback when username is missing (ensures all users display with meaningful names)
