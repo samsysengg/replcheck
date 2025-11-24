@@ -194,7 +194,7 @@ export function MessageView({
                       <Avatar className="w-9 h-9">
                         <AvatarImage src={author.avatar} />
                         <AvatarFallback>
-                          {author.username.substring(0, 2).toUpperCase()}
+                          {(author.username || (author.email ? author.email.split("@")[0] : "U")).substring(0, 2).toUpperCase()}
                         </AvatarFallback>
                       </Avatar>
                     )}
@@ -203,7 +203,7 @@ export function MessageView({
                     {showAvatar && author && (
                       <div className="flex items-baseline gap-2 mb-1">
                         <span className="font-medium text-sm text-foreground">
-                          {author.username}
+                          {author.username || (author.email ? author.email.split("@")[0] : "Unknown")}
                         </span>
                         <span className="text-xs text-muted-foreground">
                           {format(new Date(message.createdAt), "h:mm a")}

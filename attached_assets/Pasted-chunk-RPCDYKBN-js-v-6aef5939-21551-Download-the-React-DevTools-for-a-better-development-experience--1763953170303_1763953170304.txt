@@ -1,0 +1,61 @@
+chunk-RPCDYKBN.js?v=6aef5939:21551 Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools
+client:560 [vite] server connection lost. Polling for restart...
+(index):1  Failed to load resource: the server responded with a status of 502 (Bad Gateway)
+SocketContext.tsx:37 Socket connected
+/api/direct-messages/6923c98ab112c65be4f2b2b4/messages:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+/api/direct-messages/6923c98ab112c65be4f2b2b4/messages:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+/api/direct-messages/6923c9faf393d4a242bfb3a7/messages:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+message-view.tsx:197 Uncaught TypeError: Cannot read properties of undefined (reading 'substring')
+    at message-view.tsx:197:44
+    at Array.map (<anonymous>)
+    at MessageView (message-view.tsx:177:22)
+    at renderWithHooks (chunk-RPCDYKBN.js?v=6aef5939:11548:26)
+    at updateFunctionComponent (chunk-RPCDYKBN.js?v=6aef5939:14582:28)
+    at beginWork (chunk-RPCDYKBN.js?v=6aef5939:15924:22)
+    at HTMLUnknownElement.callCallback2 (chunk-RPCDYKBN.js?v=6aef5939:3674:22)
+    at Object.invokeGuardedCallbackDev (chunk-RPCDYKBN.js?v=6aef5939:3699:24)
+    at invokeGuardedCallback (chunk-RPCDYKBN.js?v=6aef5939:3733:39)
+    at beginWork$1 (chunk-RPCDYKBN.js?v=6aef5939:19765:15)
+message-view.tsx:197 Uncaught TypeError: Cannot read properties of undefined (reading 'substring')
+    at message-view.tsx:197:44
+    at Array.map (<anonymous>)
+    at MessageView (message-view.tsx:177:22)
+    at renderWithHooks (chunk-RPCDYKBN.js?v=6aef5939:11548:26)
+    at updateFunctionComponent (chunk-RPCDYKBN.js?v=6aef5939:14582:28)
+    at beginWork (chunk-RPCDYKBN.js?v=6aef5939:15924:22)
+    at HTMLUnknownElement.callCallback2 (chunk-RPCDYKBN.js?v=6aef5939:3674:22)
+    at Object.invokeGuardedCallbackDev (chunk-RPCDYKBN.js?v=6aef5939:3699:24)
+    at invokeGuardedCallback (chunk-RPCDYKBN.js?v=6aef5939:3733:39)
+    at beginWork$1 (chunk-RPCDYKBN.js?v=6aef5939:19765:15)
+chunk-RPCDYKBN.js?v=6aef5939:14032 The above error occurred in the <MessageView> component:
+
+    at MessageView (https://7a12763b-fdce-4c1e-a625-10d2184551e0-00-3ph89qga47n4p.picard.replit.dev/src/components/message-view.tsx:26:3)
+    at div
+    at div
+    at HomePage (https://7a12763b-fdce-4c1e-a625-10d2184551e0-00-3ph89qga47n4p.picard.replit.dev/src/pages/home.tsx:38:28)
+    at PrivateRoute (https://7a12763b-fdce-4c1e-a625-10d2184551e0-00-3ph89qga47n4p.picard.replit.dev/src/App.tsx?v=I2s-wn21n1nNoHRp5XGSR:28:36)
+    at Route (https://7a12763b-fdce-4c1e-a625-10d2184551e0-00-3ph89qga47n4p.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=6aef5939:206:16)
+    at Switch (https://7a12763b-fdce-4c1e-a625-10d2184551e0-00-3ph89qga47n4p.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=6aef5939:262:17)
+    at Router
+    at Provider (https://7a12763b-fdce-4c1e-a625-10d2184551e0-00-3ph89qga47n4p.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-66JOO7XH.js?v=6aef5939:44:15)
+    at TooltipProvider (https://7a12763b-fdce-4c1e-a625-10d2184551e0-00-3ph89qga47n4p.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=6aef5939:2350:5)
+    at SocketProvider (https://7a12763b-fdce-4c1e-a625-10d2184551e0-00-3ph89qga47n4p.picard.replit.dev/src/contexts/SocketContext.tsx:23:34)
+    at AuthProvider (https://7a12763b-fdce-4c1e-a625-10d2184551e0-00-3ph89qga47n4p.picard.replit.dev/src/contexts/AuthContext.tsx:21:32)
+    at QueryClientProvider (https://7a12763b-fdce-4c1e-a625-10d2184551e0-00-3ph89qga47n4p.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@tanstack_react-query.js?v=6aef5939:3093:3)
+    at App
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+logCapturedError @ chunk-RPCDYKBN.js?v=6aef5939:14032
+chunk-RPCDYKBN.js?v=6aef5939:9129 Uncaught TypeError: Cannot read properties of undefined (reading 'substring')
+    at message-view.tsx:197:44
+    at Array.map (<anonymous>)
+    at MessageView (message-view.tsx:177:22)
+    at renderWithHooks (chunk-RPCDYKBN.js?v=6aef5939:11548:26)
+    at updateFunctionComponent (chunk-RPCDYKBN.js?v=6aef5939:14582:28)
+    at beginWork (chunk-RPCDYKBN.js?v=6aef5939:15924:22)
+    at beginWork$1 (chunk-RPCDYKBN.js?v=6aef5939:19753:22)
+    at performUnitOfWork (chunk-RPCDYKBN.js?v=6aef5939:19198:20)
+    at workLoopSync (chunk-RPCDYKBN.js?v=6aef5939:19137:13)
+    at renderRootSync (chunk-RPCDYKBN.js?v=6aef5939:19116:15)
+SocketContext.tsx:42 Socket disconnected

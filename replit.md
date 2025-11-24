@@ -178,6 +178,8 @@ Following Microsoft Fluent Design principles with:
 ## Recent Changes
 
 **November 24, 2025 (Latest)**
+- Fixed MessageView crash when displaying user avatars: Added fallback for undefined usernames in avatar display
+- Users with missing username fields now use email local part as fallback in message author names and avatars
 - Fixed ChannelSidebar crash when filtering DMs: Added defensive check for undefined usernames before .toLowerCase() call
 - Users with missing username fields now use email local part as fallback display name during search
 - Fixed login endpoint error (500 - "Illegal arguments: string, undefined"): Added defensive check to verify password exists in database before bcrypt comparison
