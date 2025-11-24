@@ -8,6 +8,7 @@ import { CreateWorkspaceDialog } from "@/components/create-workspace-dialog";
 import { CreateChannelDialog } from "@/components/create-channel-dialog";
 import { SearchDialog } from "@/components/search-dialog";
 import { AddParticipantsDialog } from "@/components/add-participants-dialog";
+import { NewChatDialog } from "@/components/new-chat-dialog";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSocket } from "@/contexts/SocketContext";
@@ -29,6 +30,7 @@ export default function HomePage() {
   const [createChannelOpen, setCreateChannelOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [addParticipantsOpen, setAddParticipantsOpen] = useState(false);
+  const [newChatOpen, setNewChatOpen] = useState(false);
   const [inCall, setInCall] = useState(false);
 
   const { data: workspaces = [] } = useQuery<Workspace[]>({
@@ -176,13 +178,20 @@ export default function HomePage() {
   const activeDm = directMessages.find((dm) => dm._id === activeDmId) || null;
 
   const usersMap = new Map<string, User>();
+  const allUsers: User[] = [];
+  
   if (user) {
     usersMap.set(user._id, user);
+    allUsers.push(user);
   }
+  
   directMessages.forEach((dm) => {
     if (dm.participants && Array.isArray(dm.participants)) {
       dm.participants.forEach((participant) => {
-        usersMap.set(participant._id, participant);
+        if (!usersMap.has(participant._id)) {
+          usersMap.set(participant._id, participant);
+          allUsers.push(participant);
+        }
       });
     }
   });
@@ -294,6 +303,7 @@ export default function HomePage() {
             setActiveChannelId(null);
           }}
           onCreateChannel={() => setCreateChannelOpen(true)}
+          onNewChat={() => setNewChatOpen(true)}
           currentUser={user}
         />
         <MessageView
@@ -335,6 +345,14 @@ export default function HomePage() {
           isLoading={addParticipantsMutation.isPending}
           currentParticipantIds={activeDm?.participantIds || []}
           isGroupChat={activeDm?.isGroupChat || false}
+        />
+        <NewChatDialog
+          open={newChatOpen}
+          onOpenChange={setNewChatOpen}
+          users={allUsers}
+          currentUserId={user._id}
+          onSelectUser={handleSelectUser}
+          isLoading={createDmMutation.isPending}
         />
       </div>
     </div>

@@ -23,6 +23,7 @@ interface ChannelSidebarProps {
   onChannelSelect: (channelId: string) => void;
   onDmSelect: (dmId: string) => void;
   onCreateChannel: () => void;
+  onNewChat: () => void;
   currentUser: User | null;
 }
 
@@ -35,6 +36,7 @@ export function ChannelSidebar({
   onChannelSelect,
   onDmSelect,
   onCreateChannel,
+  onNewChat,
   currentUser,
 }: ChannelSidebarProps) {
   const [searchQuery, setSearchQuery] = useState("");
@@ -140,6 +142,15 @@ export function ChannelSidebar({
                   <span>Direct Messages</span>
                 </button>
               </CollapsibleTrigger>
+              <Button
+                size="icon"
+                variant="ghost"
+                onClick={onNewChat}
+                className="h-6 w-6"
+                data-testid="button-new-chat"
+              >
+                <Plus className="w-3 h-3" />
+              </Button>
             </div>
             <CollapsibleContent className="space-y-0.5 mt-1">
               {filteredDms.map((dm) => {
