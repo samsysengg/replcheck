@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
+import { ChannelSidebar } from "@/components/channel-sidebar";
 import { MessageView } from "@/components/message-view";
 import { VideoCall } from "@/components/video-call";
 import { CreateWorkspaceDialog } from "@/components/create-workspace-dialog";
@@ -16,7 +17,7 @@ import { useToast } from "@/hooks/use-toast";
 import { queryClient, apiRequest } from "@/lib/queryClient";
 import { getAuthToken } from "@/lib/auth";
 import { Workspace, Channel, Message, DirectMessage, User } from "@shared/schema";
-import { Search, LogOut, Plus } from "lucide-react";
+import { Search, LogOut } from "lucide-react";
 
 export default function HomePage() {
   const { user, logout } = useAuth();
@@ -365,15 +366,6 @@ export default function HomePage() {
           <Button
             size="icon"
             variant="ghost"
-            onClick={() => setNewChatOpen(true)}
-            data-testid="button-new-chat"
-            className="hidden sm:flex"
-          >
-            <Plus className="h-5 w-5" />
-          </Button>
-          <Button
-            size="icon"
-            variant="ghost"
             onClick={() => setSearchOpen(true)}
             data-testid="button-search"
           >
@@ -399,6 +391,25 @@ export default function HomePage() {
         </div>
       </header>
       <div className="flex flex-1 overflow-hidden min-h-0 w-full">
+        <ChannelSidebar
+          workspace={activeWorkspace}
+          channels={channels}
+          directMessages={directMessages}
+          activeChannelId={activeChannelId}
+          activeDmId={activeDmId}
+          onChannelSelect={(id) => {
+            setActiveChannelId(id);
+            setActiveDmId(null);
+          }}
+          onDmSelect={(id) => {
+            setActiveDmId(id);
+            setActiveChannelId(null);
+          }}
+          onCreateChannel={() => setCreateChannelOpen(true)}
+          onNewChat={() => setNewChatOpen(true)}
+          currentUser={user}
+          dmMessageCounts={dmMessageCounts}
+        />
         <MessageView
           channel={activeChannel}
           directMessage={activeDm}
