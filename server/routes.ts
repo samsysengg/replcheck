@@ -452,6 +452,35 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (directMessageId) {
         // Broadcast DM message to all participants in this DM
         io.to(`dm:${directMessageId}`).emit("new_message", messageResponse);
+
+        // Also fetch and broadcast the DM info so it appears in recipient's list
+        const dm = await DirectMessageModel.findById(directMessageId);
+        if (dm) {
+          const participants = await UserModel.find({
+            _id: { $in: dm.participantIds },
+          });
+
+          const dmResponse = {
+            _id: dm._id.toString(),
+            participantIds: dm.participantIds.map((id) => id.toString()),
+            participants: participants.map((p) => ({
+              _id: p._id.toString(),
+              username: p.username,
+              email: p.email,
+              avatar: p.avatar,
+              status: p.status,
+            })),
+            workspaceId: dm.workspaceId.toString(),
+            name: dm.name,
+            isGroupChat: dm.isGroupChat,
+            createdAt: dm.createdAt,
+          };
+
+          // Notify all participants about the DM (to ensure it appears in their list)
+          for (const participantId of dm.participantIds) {
+            io.to(`user:${participantId.toString()}`).emit("new_dm", dmResponse);
+          }
+        }
       }
 
       res.json(messageResponse);
