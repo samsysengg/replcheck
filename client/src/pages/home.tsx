@@ -303,8 +303,8 @@ export default function HomePage() {
   }
 
   return (
-    <div className="flex h-screen overflow-hidden flex-col">
-      <header className="flex items-center justify-between px-4 py-2 border-b bg-card">
+    <div className="flex min-h-screen overflow-hidden flex-col">
+      <header className="flex items-center justify-between px-4 py-2 border-b bg-card flex-shrink-0">
         <h1 className="text-lg font-semibold">TeamTalk</h1>
         <div className="flex items-center gap-2">
           <Button
@@ -325,7 +325,7 @@ export default function HomePage() {
           </Button>
         </div>
       </header>
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex flex-1 overflow-hidden min-h-0">
         <WorkspaceSidebar
           workspaces={workspaces}
           activeWorkspaceId={activeWorkspaceId}
